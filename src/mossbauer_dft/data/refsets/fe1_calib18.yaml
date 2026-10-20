@@ -1,0 +1,465 @@
+schema_version: '1.0'
+id: fe1_calib18
+title: Project curated 18-compound 57Fe isomer-shift calibration set (fe1_calib18)
+doi: 10.1021/acsomega.7b00595; 10.1021/ct100398m; 10.1021/acs.jctc.1c00722; 10.1021/ic9008784
+reference_delta: alpha-Fe (McWilliams entries stated; Bochevarov/Comas-Vila reference not stated in retrieved text)
+structure_status: bundled
+structure_status_note: 'Starting geometries only (RDKit-built nacnac complexes, COD X-ray structures, hand-built ions); they are re-optimised
+  at the plan''s geometry level by `mossbauer refset setup`. Mixed T: 80 K (6 McWilliams entries) and nominal 4.2 K (12 others); second-order-Doppler
+  scatter <= ~0.02-0.03 mm/s not corrected.'
+curation: Curated in-project (fe1_calib_trainingset_notes.md); held-out project validation targets are NOT in the set. No S- or P-ligated Fe(I), no
+  Fe(0)/Fe(IV).
+caveats:
+  b3lyp_outlier: 'Ferrocene: B3LYP over-predicts delta by about +0.15 mm/s (McWilliams 2017 Table 9); consider excluding from the fit and using
+    it as a check.'
+  high_leverage_single_Fe(VI)_point: '[FeO4]2-: the only Fe(VI) point, so it has very large leverage on the slope; fit with and without it.'
+  delta_T_unverified: '[FeO4]2-: no liquid-He data exist per Bochevarov 2010, so the 4.2 K label is unverified.'
+  hand_built_geometry: Geometry is hand built from generic literature-typical bond lengths (or a COD structure with disorder removed / counter-cation
+    dropped); starting point for optimization only.
+  rdkit_built_geometry: Geometry is an RDKit ETKDG + UFF embed with Fe-ligand distance restraints (no crystal structure retrieved); starting point
+    for optimization only.
+compounds:
+- id: lxylFeCO3
+  name: (MeL^Me,Me)Fe(CO)3 [MeL^Me,Me = MeC{C(Me)N(2,6-Me2C6H3)}2]
+  set: training
+  formal_ox_state: '+1'
+  n_fe: 1
+  spin_state: low-spin
+  spin_S_as_printed: '0.5'
+  spin_S: 0.5
+  multiplicity: 2
+  charge: 0
+  delta_exp_mm_s: 0.12
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 0.77
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 1 (delta, 80 K per fn d); Table 5 / Table 12 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: RDKit built (c)
+  geometry_detail: ETKDG embed with Fe-N 1.98 / Fe-C 1.80 A distance restraints + UFF; resulting Fe-C 1.88-1.89, Fe-N 2.00 A. No COD/SI structure
+    retrieved. Ligand definition from PMC5563838 (Holland group).
+  structure: bundled
+  structure_file: structures/fe1_calib18/lxylFeCO3.xyz
+  flags:
+  - rdkit_built_geometry
+  notes: Fe(I), C-ligated. Rows for the same ligand set (Fe(I) C6H6, Fe(II) Ind) share ligand.
+- id: lxylFeC6H6
+  name: (MeL^Me,Me)Fe(eta6-C6H6)
+  set: training
+  formal_ox_state: '+1'
+  n_fe: 1
+  spin_state: low-spin
+  spin_S_as_printed: '0.5'
+  spin_S: 0.5
+  multiplicity: 2
+  charge: 0
+  delta_exp_mm_s: 0.68
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 0.69
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 3 (delta, T); Table 5 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: RDKit built (c)
+  geometry_detail: As above; Fe-C(arene) 2.13-2.14 A, Fe-N 2.03 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/lxylFeC6H6.xyz
+  flags:
+  - rdkit_built_geometry
+  notes: 'Fe(I) arene. Authors'' computed delta 0.77 vs exp 0.68 (+0.09): poorer case.'
+- id: lxylFeInd
+  name: (MeL^Me,Me)Fe(eta5-indenyl)
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: intermediate-spin
+  spin_S_as_printed: '1.0'
+  spin_S: 1.0
+  multiplicity: 3
+  charge: 0
+  delta_exp_mm_s: 0.67
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 1.07
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 3 (delta, T); Table 5 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: RDKit built (c)
+  geometry_detail: As above; eta5 Fe-C 2.09-2.14 A, Fe-N 2.02 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/lxylFeInd.xyz
+  flags:
+  - rdkit_built_geometry
+  notes: S=1 per Table 3; Table 12 shows exp. delta matches S=1 (0.67) rather than S=1/2 (0.58) or S=5/2 (0.79).
+- id: Cp2Fe
+  name: Ferrocene, Fe(C5H5)2
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: low-spin
+  spin_S_as_printed: '0.0'
+  spin_S: 0.0
+  multiplicity: 1
+  charge: 0
+  delta_exp_mm_s: 0.53
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 2.41
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 3 (delta, T); Table 5/Table 9 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: hand built (c)
+  geometry_detail: D5d staggered, Fe-Cp(centroid) 1.65 A, C-C 1.43, C-H 1.08 A -> Fe-C 2.05 A. COD 7033930 is disordered (two Cp orientations)
+    and was not used.
+  structure: bundled
+  structure_file: structures/fe1_calib18/Cp2Fe.xyz
+  flags:
+  - b3lyp_outlier
+  - hand_built_geometry
+  notes: 'CAUTION: McWilliams et al. report a systematic ~+0.15 mm/s over-prediction of delta for ferrocene (Table 9) and verified the spectrum;
+    consider holding out of the fit.'
+- id: PNPiPrFeCl2
+  name: '[Fe(Cl)2{HN(CH2CH2PiPr2)2}]'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: 0
+  delta_exp_mm_s: 0.86
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 2.89
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 3 (delta, T); Table 5 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: COD 4338673 (b)
+  geometry_detail: COD 4338673 (Inorg. Chem. 2014; 223 K). Minor disorder component (group 2, 16% occ.) of one iPr removed; 59 atoms, Fe-P 2.49/2.50,
+    Fe-N 2.37, Fe-Cl 2.33/2.34 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/PNPiPrFeCl2.xyz
+  flags: []
+  notes: P-ligated Fe(II). Assumes COD 4338673 is the same compound as the Mossbauer compound (ref 28 in McWilliams); formula match only.
+- id: PNPtBuFeCl2
+  name: '[Fe(Cl)2{HN(CH2CH2PtBu2)2}]'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: 0
+  delta_exp_mm_s: 0.99
+  delta_T_K: 80.0
+  delta_T_note: null
+  deq_abs_exp_mm_s: 2.69
+  exp_source_doi: 10.1021/acsomega.7b00595
+  source_table: Table 3 (delta, T); Table 5 (|dEQ|)
+  delta_reference: alpha-Fe/iron foil at 298-300 K (stated, McWilliams Table 1 fn d)
+  geometry_source: COD 4338674 (b)
+  geometry_detail: COD 4338674 (Inorg. Chem. 2014; 93 K); Fe-P 2.61, Fe-N 2.22, Fe-Cl 2.33/2.34 A; 71 atoms.
+  structure: bundled
+  structure_file: structures/fe1_calib18/PNPtBuFeCl2.xyz
+  flags: []
+  notes: P-ligated Fe(II). Same caveat on compound identity.
+- id: FeSPh4
+  name: '[Fe(SPh)4]2-'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: -2
+  delta_exp_mm_s: 0.66
+  delta_T_K: 4.2
+  delta_T_note: null
+  deq_abs_exp_mm_s: 3.24
+  exp_source_doi: 10.1021/ct100398m
+  source_table: Table 1 entry 13 (PTHPFE10); same delta/T in Hopmann et al. 10.1021/ic9008784 Table 4/6
+  delta_reference: reference not stated in retrieved text (assumed alpha-Fe, RT)
+  geometry_source: COD 7102716 (b)
+  geometry_detail: COD 7102716 = K2[Fe(SPh)4] (2004, 293 K), K+ removed, H atoms from CIF. NOT the Et4N/Ph4P salt used for the Mossbauer data
+    (Coucouvanis 1981); Fe-S 2.337 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeSPh4.xyz
+  flags: []
+  notes: S-ligated Fe(II) rubredoxin model. Comas-Vila B3LYP calc 0.78 vs 0.66.
+- id: FeSEt4
+  name: '[Fe(SEt)4]-'
+  set: training
+  formal_ox_state: '+3'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.5'
+  spin_S: 2.5
+  multiplicity: 6
+  charge: -1
+  delta_exp_mm_s: 0.25
+  delta_T_K: 4.2
+  delta_T_note: null
+  deq_abs_exp_mm_s: 0.62
+  exp_source_doi: 10.1021/ct100398m
+  source_table: Table 1 entry 26 (CANDAW10); Hopmann et al. 10.1021/ic9008784 Table 4 (0.25, 4.2 K)
+  delta_reference: reference not stated in retrieved text (assumed alpha-Fe, RT)
+  geometry_source: hand built (c)
+  geometry_detail: Td Fe-S 2.27, S-C 1.83, C-C 1.53 A, Fe-S-C 105 deg, anti ethyls, H added geometrically.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeSEt4.xyz
+  flags:
+  - hand_built_geometry
+  notes: S-ligated Fe(III) rubredoxin-oxidised model. Comas-Vila B3LYP calc 0.37 vs 0.25.
+- id: FeCl4_2m
+  name: '[FeCl4]2-'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: -2
+  delta_exp_mm_s: 1.05
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 45 (DEBWEM)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Td, Fe-Cl 2.30 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeCl4_2m.xyz
+  flags:
+  - hand_built_geometry
+  notes: null
+- id: FeBr4_2m
+  name: '[FeBr4]2-'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: -2
+  delta_exp_mm_s: 1.12
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 46 (DEBWIQ)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Td, Fe-Br 2.41 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeBr4_2m.xyz
+  flags:
+  - hand_built_geometry
+  notes: null
+- id: FeCl4_m
+  name: '[FeCl4]-'
+  set: training
+  formal_ox_state: '+3'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.5'
+  spin_S: 2.5
+  multiplicity: 6
+  charge: -1
+  delta_exp_mm_s: 0.36
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 52 (MICYFE10)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Td, Fe-Cl 2.19 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeCl4_m.xyz
+  flags:
+  - hand_built_geometry
+  notes: null
+- id: FeO4_2m
+  name: '[FeO4]2- (ferrate)'
+  set: training
+  formal_ox_state: '+6'
+  n_fe: 1
+  spin_state: S=1
+  spin_S_as_printed: '1.0'
+  spin_S: 1.0
+  multiplicity: 3
+  charge: -2
+  delta_exp_mm_s: -0.9
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text); Bochevarov et al. state FeO4(2-) lacks liquid-He data, so the 4.2 K label is UNVERIFIED
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 53 (ICSD 32756)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Td, Fe-O 1.66 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeO4_2m.xyz
+  flags:
+  - high_leverage_single_Fe(VI)_point
+  - delta_T_unverified
+  - hand_built_geometry
+  notes: Only Fe(VI) point and the lowest delta in the set; leverage on slope. Temperature unverified.
+- id: FeH2O6_2p
+  name: '[Fe(H2O)6]2+'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: 2
+  delta_exp_mm_s: 1.39
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 48 (ICSD 16589)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Oh Fe-O 2.12 A, O-H 0.97 A, H-O-H 104.5; waters planar.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeH2O6_2p.xyz
+  flags:
+  - hand_built_geometry
+  notes: 'Aqua complex: orientation of waters affects rho(0) slightly; Th-like arrangement used.'
+- id: FeCl5H2O_2m
+  name: '[FeCl5(H2O)]2-'
+  set: training
+  formal_ox_state: '+3'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.5'
+  spin_S: 2.5
+  multiplicity: 6
+  charge: -2
+  delta_exp_mm_s: 0.49
+  delta_T_K: 4.2
+  delta_T_note: null
+  deq_abs_exp_mm_s: 0.56
+  exp_source_doi: 10.1021/ct100398m
+  source_table: Table 1 entry 25 (VOCBAQ); also Comas-Vila Table 3 entry 54
+  delta_reference: reference not stated in retrieved text (assumed alpha-Fe, RT)
+  geometry_source: hand built (c)
+  geometry_detail: Octahedral, Fe-Cl 2.36, Fe-O 2.05 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeCl5H2O_2m.xyz
+  flags:
+  - hand_built_geometry
+  notes: null
+- id: FeCl6_3m
+  name: '[FeCl6]3-'
+  set: training
+  formal_ox_state: '+3'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.5'
+  spin_S: 2.5
+  multiplicity: 6
+  charge: -3
+  delta_exp_mm_s: 0.56
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 51 (DALLIL)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Oh, Fe-Cl 2.42 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeCl6_3m.xyz
+  flags:
+  - hand_built_geometry
+  notes: null
+- id: FeF6_4m
+  name: '[FeF6]4-'
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: -4
+  delta_exp_mm_s: 1.48
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 3 entry 44 (ICSD 26603)
+  delta_reference: not stated
+  geometry_source: hand built (c)
+  geometry_detail: Oh, Fe-F 2.05 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FeF6_4m.xyz
+  flags:
+  - hand_built_geometry
+  notes: Highest delta in set; highly charged isolated anion (gas-phase SCF may be difficult).
+- id: FephenCl2
+  name: cis-[FeCl2(phen)2]
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: 0
+  delta_exp_mm_s: 1.05
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 1 entry 18 (CPENFE01)
+  delta_reference: not stated
+  geometry_source: COD 2206044 (b)
+  geometry_detail: COD 2206044 (Acta Cryst. E 2005; 292 K); Fe-N 2.18-2.28, Fe-Cl 2.36/2.47 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FephenCl2.xyz
+  flags: []
+  notes: N-ligated Fe(II).
+- id: FepyCl2
+  name: trans-[FeCl2(py)4]
+  set: training
+  formal_ox_state: '+2'
+  n_fe: 1
+  spin_state: high-spin
+  spin_S_as_printed: '2.0'
+  spin_S: 2.0
+  multiplicity: 5
+  charge: 0
+  delta_exp_mm_s: 1.16
+  delta_T_K: 4.2
+  delta_T_note: 4.2 (column header 'delta 4.2K' in Comas-Vila Tables 1-3; whether value is measured at or corrected to 4.2 K is not stated in
+    retrieved text)
+  deq_abs_exp_mm_s: null
+  exp_source_doi: 10.1021/acs.jctc.1c00722
+  source_table: Table 1 entry 20 (TPYFEC)
+  delta_reference: not stated
+  geometry_source: COD 4026383 (b)
+  geometry_detail: COD 4026383 (J. Org. Chem. 2011; 103 K); Fe-N 2.22, Fe-Cl 2.42 A.
+  structure: bundled
+  structure_file: structures/fe1_calib18/FepyCl2.xyz
+  flags: []
+  notes: COD entry is a different crystal determination than TPYFEC.

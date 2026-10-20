@@ -1,0 +1,414 @@
+schema_version: '1.0'
+created: '2026-10-16'
+purpose: 'decision table: system class -> recommended functional for δ and ΔEQ, basis, solvation, calibration entry (id in mossbauer_calibrations.yaml)'
+matching: Rule R00 always applies. Among R01-R10 select all rules whose applies_to matches the system; the highest 'priority' (specificity
+  score) wins, and conflicts are reported to the user (plan-then-approve). R99 (priority 0) is the fallback when nothing else matches.
+calibration_status_note: Only mcwilliams2017_* entries have verified alpha/C/beta. Papai/Neese/Römelt/Bochevarov/Santra constants were
+  not verified; the tool must refit a project calibration on the training-set table (mossbauer_training_set.csv) with its own ρ0 values
+  before trusting δ.
+rules:
+- id: R00_global_constraints
+  priority: 0
+  applies_to: all
+  kind: constraint
+  statement:
+  - Isomer-shift constants (alpha, C, beta) are valid only for the exact functional/basis/Hamiltonian/grid/code/solvation combination
+    they were fitted with; C is arbitrary and differs between papers (e.g. 11580/11810 as quoted in later secondary sources for Neese/Römelt-type fits — unverified against the primary papers; 13780/14760 in McWilliams
+    2017, 14362 in Santra 2024).
+  - Report δ vs α-Fe at room temperature; experimental temperature should be recorded (second-order Doppler shift is minimal, < 0.02
+    mm/s, at LN2 and below per McWilliams; Pápai corrects to 4.2 K).
+  - ΔEQ from EFG with Q(57Fe) = 0.16 b; sign requires a field/single-crystal experiment — compare |ΔEQ| unless sign is known (Pápai,
+    Comas-Vilà).
+  - Do not use MN15 (or other >40% exact-exchange functionals) for ΔEQ of Fe(I) (project finding); M06-2X and SVWN5 were also the worst
+    performers in Bochevarov 2010.
+  evidence:
+  - project finding (this project, 2026-10-16)
+  - 10.1021/ct100398m
+  - 10.1021/ct4007585
+  - 10.1021/acsomega.7b00595
+  - 10.1039/d4cp00431k
+  citations:
+  - 10.1021/ct100398m
+  - 10.1021/ct4007585
+  - 10.1021/acsomega.7b00595
+- id: R01_FeI_lowcoordinate
+  priority: 10
+  applies_to:
+    oxidation_state:
+    - 1
+    spin:
+    - 1/2
+    - 3/2
+    radical_ligand: no / not suspected
+    size: <= ~150 atoms
+    nitrosyl: false
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    fallback_calibration_entry: mcwilliams2017_b3lyp_def2tzvp
+    expected_error_mm_s: '0.04 (training), 0.09-0.10 for non-diketiminate Fe (McWilliams Table 4); project: must re-validate on 1/3
+      when applied to MN15 geometries'
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+    forbidden:
+    - MN15
+    expected_error_mm_s: B3LYP/TPSSh agree well with experiment in project benchmarks; McWilliams B3LYP MAE 0.27 (diketiminate) and ΔEQ
+      overestimated for 3-coordinate Fe(I)/Fe(II)
+  geometry: MN15/def2-SVP (project default for geometry & BS energetics); literature calibration geometries were BP86-D3BJ/ZORA-def2-TZVP
+    — geometry mismatch adds uncertainty
+  solvation: gas phase (project default) or COSMO toluene (McWilliams calibration used COSMO ε=2.4)
+  justification: 'B3LYP/CP(PPP) (or def2-TZVP) is the only published, fully tabulated calibration that spans Fe(I) complexes; MN15 (44%
+    exact exchange) overestimates |ΔEQ| of Fe(I) in project benchmarks, while B3LYP/TPSSh agree well with experiment.'
+  evidence:
+  - project finding
+  - 10.1021/acsomega.7b00595
+  citations:
+  - 10.1021/acsomega.7b00595
+  - 10.1021/ct4007585
+  confidence: medium (calibration constants verified; project geometry differs from calibration geometry)
+- id: R02_FeI_radical_or_BS
+  priority: 9
+  applies_to:
+    oxidation_state:
+    - 1
+    - 0..2 ambiguous
+    radical_ligand: yes or suspected (alkyne, tetraazadiene, redox-active N-donors)
+    spin: any
+  delta:
+    functional: B3LYP
+    broken_symmetry: run BS(n+m,n) and high-spin solutions; use the lowest-energy BS state; report δ per Fe site
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+    forbidden:
+    - MN15
+  geometry: MN15/def2-SVP; check spin-state ordering and <S²> before property calculation
+  solvation: gas phase
+  justification: Mössbauer δ is used to assign the 'true' Fe oxidation state when ligands are redox-active (Holland); BS-DFT is needed
+    for ambiguous Fe/L radical states, and the MN15 ΔEQ failure was observed in this class, so B3LYP/TPSSh are used for the properties.
+  evidence:
+  - 10.1021/acsomega.7b00595
+  - 10.1021/acs.jctc.1c00722
+  citations:
+  - 10.1021/acsomega.7b00595
+  - 10.1021/acs.jctc.1c00722
+  confidence: 'low-medium: no published calibration was fitted specifically on BS radical-ligand Fe(I) species; treat as hypothesis
+    testing against experimental spectra'
+  notes: Comas-Vilà report that mixed-valence S=1/2 dinuclear (Fe(II)/Fe(III) AF-coupled) is the worst case for single-determinant KS-DFT
+    (Fe(III) site 0.65 calc vs 0.50 exp).
+- id: R03_Fe0_organometallic
+  priority: 8
+  applies_to:
+    oxidation_state:
+    - 0
+    ligands: CO / olefin / π-acceptor
+    spin:
+    - '0'
+    - '1'
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    alternative: papai_vanko2013 (alpha/beta not retrieved)
+  deltaEQ:
+    functional: B3LYP (or COSMO-RPBE for π-bonded)
+    crosscheck_functional: TPSSh
+  geometry: DFT-optimized
+  solvation: COSMO or gas
+  justification: Pápai & Vankó's recipe assigns the GGA COSMO-RPBE to π-bonded compounds for ΔEQ; B3LYP/CP(PPP) gives δ MAE 0.05-0.06
+    over 66 complexes including Fe(0) carbonyls.
+  evidence:
+  - 10.1021/ct4007585
+  citations:
+  - 10.1021/ct4007585
+  confidence: medium
+- id: R04_FeII_highspin
+  priority: 7
+  applies_to:
+    oxidation_state:
+    - 2
+    spin:
+    - '2'
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+  geometry: DFT-optimized (BP86-type) or X-ray
+  solvation: COSMO
+  justification: 'Pápai recipe: B3LYP for S=2 Fe(II) ΔEQ; B3LYP δ MAE 0.05 with COSMO. Bochevarov: +2 MUE 0.027-0.028 mm/s with B3LYP.'
+  evidence:
+  - 10.1021/ct4007585
+  - 10.1021/ct100398m
+  citations:
+  - 10.1021/ct4007585
+  - 10.1021/ct100398m
+  confidence: medium-high
+- id: R05_FeII_lowspin_and_intermediate
+  priority: 6
+  applies_to:
+    oxidation_state:
+    - 2
+    spin:
+    - '0'
+    - '1'
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+  deltaEQ:
+    functional: TPSSh
+    solvation: COSMO
+    special_cases: 'planar S=1 porphyrins (Fe(OEP), Fe(TPP)) and square-planar systems: COSMO-RPBE, with symmetry-adapted/degenerate-state
+      treatment'
+  geometry: DFT-optimized
+  solvation: COSMO (omit COSMO and use GGA for the special degenerate cases)
+  justification: 'Pápai recipe: TPSSh+COSMO satisfactory for most cases; GGA COSMO-RPBE for π-bonded, square-planar S=1 and distorted
+    open-shell hexacoordinate cases; B3LYP underestimates ΔEQ of Fe(OEP)/Fe(TPP) by 1.2-1.3 mm/s.'
+  evidence:
+  - 10.1021/ct4007585
+  citations:
+  - 10.1021/ct4007585
+  confidence: medium
+- id: R06_FeIII
+  priority: 6
+  applies_to:
+    oxidation_state:
+    - 3
+    spin:
+    - 1/2
+    - 3/2
+    - 5/2
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    alternative: oxidation-state-specific line (+3,+4) of Bochevarov 2010 (constants only in SI, not retrieved)
+  deltaEQ:
+    functional: TPSSh (+COSMO); B3LYP+COSMO for S=3/2
+    crosscheck_functional: B3LYP
+  geometry: DFT-optimized or X-ray
+  solvation: COSMO
+  justification: 'Pápai recipe: TPSSh+COSMO default, B3LYP+COSMO for S=3/2 Fe(III); Gallenkamp: TPSSh, B3LYP, PBE0 perform about equally
+    for FeN4-6 (R 0.985-0.989).'
+  evidence:
+  - 10.1021/ct4007585
+  - 10.1002/qua.26394
+  - 10.1021/ct100398m
+  citations:
+  - 10.1021/ct4007585
+  - 10.1002/qua.26394
+  - 10.1021/ct100398m
+  confidence: medium
+- id: R07_highvalent_FeIV_to_FeVI
+  priority: 6
+  applies_to:
+    oxidation_state:
+    - 4
+    - 5
+    - 6
+    spin:
+    - any
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: 'mcwilliams2017_b3lyp_cppp (extrapolation: training set only to +3)'
+    note: prefer a recalibration including Fe(IV)=O/nitrido references (Pápai entries 58-66; Comas-Vilà FeO4 2-)
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+  geometry: DFT-optimized
+  solvation: COSMO
+  justification: Pápai's 66-complex set includes Fe(IV)-(VI) with universal B3LYP line (MAE 0.05); McWilliams line is outside its training
+    range here, so expect larger error.
+  evidence:
+  - 10.1021/ct4007585
+  - 10.1021/acs.jctc.1c00722
+  citations:
+  - 10.1021/ct4007585
+  - 10.1021/acs.jctc.1c00722
+  confidence: low-medium
+- id: R08_nitrosyl
+  priority: 11
+  applies_to:
+    nitrosyl: true
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    uncertainty_inflation_mm_s: 0.2
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+  geometry: use X-ray geometry or a validated optimized geometry — Fe-N/N-Fe-N angle errors drive large δ errors (GIDKIN02, SONMUE outliers)
+  solvation: gas or COSMO
+  justification: 'Bochevarov: nitrosyls GIDKIN02/SONMUE were the largest IS outliers and sensitive to DFT-vs-X-ray geometry; Comas-Vilà:
+    nitrosyls hard, one species 0.22 mm/s off.'
+  evidence:
+  - 10.1021/ct100398m
+  - 10.1021/acs.jctc.1c00722
+  citations:
+  - 10.1021/ct100398m
+  - 10.1021/acs.jctc.1c00722
+  confidence: low-medium
+- id: R09_polynuclear_FeS_and_oxo_dimers
+  priority: 5
+  applies_to:
+    n_Fe: '>=2'
+    bridging: oxo/hydroxo/carboxylate/sulfide
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    broken_symmetry: true
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    alternative: Comas-Vilà ⟨ρ⟩0.06 line (def2-TZVP, constants not retrieved)
+  deltaEQ:
+    functional: B3LYP
+  geometry: X-ray or DFT
+  solvation: gas or COSMO
+  justification: B3LYP is the lowest-error functional for diiron(II)/(III) sets (Bochevarov, Comas-Vilà MAE 0.055 over 103 signals);
+    BS-UKS required for AF-coupled sites.
+  evidence:
+  - 10.1021/ct100398m
+  - 10.1021/acs.jctc.1c00722
+  citations:
+  - 10.1021/ct100398m
+  - 10.1021/acs.jctc.1c00722
+  confidence: medium
+- id: R10_large_systems
+  priority: 4
+  applies_to:
+    size: '>150 atoms or QM/MM cluster'
+  delta:
+    functional: B3LYP
+    fe_basis: def2-TZVP
+    basis_fe: def2-TZVP on all atoms (no CP(PPP))
+    calibration_entry: mcwilliams2017_b3lyp_def2tzvp
+    alternative: sphere-averaged density ⟨ρ⟩0.06 with def2-TZVP (Comas-Vilà)
+  deltaEQ:
+    functional: B3LYP
+    basis: def2-TZVP
+  geometry: truncate peripheral ligand groups only if validated
+  solvation: COSMO optional
+  justification: def2-TZVP matched CP(PPP) within 0.001 mm/s MAE at 1.46x lower cost (McWilliams); Comas-Vilà show def2-TZVP with sphere-averaged
+    density reaches MAE 0.055.
+  evidence:
+  - 10.1021/acsomega.7b00595
+  - 10.1021/acs.jctc.1c00722
+  citations:
+  - 10.1021/acsomega.7b00595
+  - 10.1021/acs.jctc.1c00722
+  confidence: medium
+- id: R99_default
+  priority: 0
+  applies_to: no other rule matches
+  delta:
+    functional: B3LYP
+    fe_basis: CP(PPP)
+    single_point_protocol:
+      program: 'ORCA >= 5 (calibrations: 2.8-4.2.1)'
+      method: UKS single point on fixed geometry
+      basis_fe: CP(PPP)
+      basis_other: def2-TZVP
+      grid: Fe integration accuracy 7 (SpecialGridAtoms 26 / SpecialGridIntAcc 7)
+      ri: 'no RI/RIJCOSX for Mössbauer single point (McWilliams: RI changes calculated parameters)'
+      scf: TightSCF
+    calibration_entry: mcwilliams2017_b3lyp_cppp
+    warning: constants trained only on 9 low-valent β-diketiminate Fe; whole-set MAE 0.053 (34 compounds)
+  deltaEQ:
+    functional: B3LYP
+    crosscheck_functional: TPSSh
+  geometry: DFT-optimized (BP86-D3BJ-type) or X-ray
+  solvation: COSMO
+  justification: B3LYP is the most consistently best-performing functional for δ across Bochevarov, Pápai, Comas-Vilà and Gallenkamp.
+  evidence:
+  - 10.1021/ct100398m
+  - 10.1021/ct4007585
+  - 10.1021/acs.jctc.1c00722
+  - 10.1002/qua.26394
+  - 10.1021/acsomega.7b00595
+  citations:
+  - 10.1021/ct100398m
+  - 10.1021/ct4007585
+  - 10.1021/acs.jctc.1c00722
+  - 10.1002/qua.26394
+  - 10.1021/acsomega.7b00595
+  confidence: medium

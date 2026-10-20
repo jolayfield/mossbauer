@@ -1,0 +1,89 @@
+name: Public installer release
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.13.1"
+      - name: Verify reviewed source and release version
+        shell: bash
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          version="$(PYTHONPATH=src python -c 'from mossbauer_dft import __version__; print(__version__)')"
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo 'Version tag does not match package metadata.' >&2
+            exit 1
+          fi
+      - run: uv build --wheel
+      - name: Select sanitized assets
+        shell: bash
+        env:
+          MOSSBAUER_PRIVATE_MARKERS: ${{ secrets.MOSSBAUER_PRIVATE_MARKERS }}
+        run: |
+          version="$(PYTHONPATH=src python -c 'from mossbauer_dft import __version__; print(__version__)')"
+          python scripts/release_assets.py --wheel "dist/mossbauer_dft-${version}-py3-none-any.whl" --version "$version" --out public-assets --require-markers
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-installer
+          path: public-assets/
+          if-no-files-found: error
+  smoke:
+    timeout-minutes: 30
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.13.1"
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-installer
+          path: public-assets
+      - run: python scripts/smoke_wheel.py --wheel-dir public-assets
+  publish:
+    timeout-minutes: 10
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [build, smoke]
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_RELEASE_REPOSITORY: jolayfield/mossbauer
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-installer
+          path: public-assets
+      - name: Publish the tested assets
+        env:
+          GH_TOKEN: ${{ secrets.PUBLIC_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo 'Set PUBLIC_RELEASE_TOKEN with contents:write access to the public releases repository, or publish the inspected artifact manually.' >&2
+            exit 1
+          fi
+          cd public-assets
+          sha256sum --check SHA256SUMS
+          printf '%s\n' 'Complete local app installer. See INSTALL.md and verify SHA256SUMS before installation.' > "$RUNNER_TEMP/release-notes.md"
+          gh release create "$GITHUB_REF_NAME" --repo "$PUBLIC_RELEASE_REPOSITORY" --target main --title "Mössbauer DFT $GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/release-notes.md" ./*.whl SHA256SUMS README.md INSTALL.md LICENSE

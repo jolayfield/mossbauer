@@ -1,0 +1,11 @@
+! UKS def2-SVP RIJCOSX def2/J Opt DefGrid3 TightSCF CPCM(water)
+%method
+  method dft
+  exchange hyb_mgga_x_mn15
+  correlation mgga_c_mn15
+end
+%pal nprocs 8 end
+%maxcore 3000
+%scf MaxIter 500 end
+%geom MaxIter 200 end
+* xyzfile -2 5 fe1_calib_FeSPh4.xyz

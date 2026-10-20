@@ -1,0 +1,15 @@
+# Copy this example into your local sites folder and use your cluster's values.
+name: example
+scheduler: slurm
+partition: compute
+sif: /path/to/orca.sif
+runtimes: [apptainer, singularity]
+scratch_root: /scratch
+account: null
+extra_sbatch: []
+defaults:
+  nprocs: 16
+  mem_gb_per_core: 3
+  time: '48:00:00'
+ssh_host: null
+remote_dir: null

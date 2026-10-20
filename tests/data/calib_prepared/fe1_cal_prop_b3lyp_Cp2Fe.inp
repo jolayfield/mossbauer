@@ -1,0 +1,16 @@
+! UKS B3LYP def2-TZVP NoRIJCOSX DefGrid3 TightSCF CPCM(water)
+%method
+  SpecialGridAtoms 26
+  SpecialGridIntAcc 7
+end
+%pal nprocs 8 end
+%maxcore 3000
+%scf MaxIter 500 end
+%basis
+  NewGTO Fe "CP(PPP)" end
+end
+* xyzfile 0 1 fe1_cal_opt_Cp2Fe.xyz
+
+%eprnmr
+  Nuclei = all Fe {rho, fgrad}
+end

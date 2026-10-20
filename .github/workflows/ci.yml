@@ -1,0 +1,71 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install complete application and test tools
+        run: python -m pip install -e ".[test]"
+      - name: Run tests
+        env:
+          MOSSBAUER_PRIVATE_MARKERS: ${{ secrets.MOSSBAUER_PRIVATE_MARKERS }}
+        run: python -m pytest
+  wheel:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.13.1"
+      - run: uv build --wheel
+      - name: Inspect public assets
+        shell: bash
+        env:
+          MOSSBAUER_PRIVATE_MARKERS: ${{ secrets.MOSSBAUER_PRIVATE_MARKERS }}
+        run: |
+          version="$(PYTHONPATH=src python -c 'from mossbauer_dft import __version__; print(__version__)')"
+          python scripts/release_assets.py --wheel "dist/mossbauer_dft-${version}-py3-none-any.whl" --version "$version" --out public-assets
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-installer
+          path: public-assets/
+          if-no-files-found: error
+  wheel-smoke:
+    timeout-minutes: 30
+    needs: wheel
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: "0.13.1"
+      - uses: actions/download-artifact@v4
+        with:
+          name: public-installer
+          path: public-assets
+      - run: python scripts/smoke_wheel.py --wheel-dir public-assets

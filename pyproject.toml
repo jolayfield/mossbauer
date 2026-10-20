@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mossbauer-dft"
+dynamic = ["version"]
+description = "Predict 57Fe Mossbauer parameters from DFT (ORCA): input generation, output parsing, calibration."
+readme = "docs/releases/README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = [
+  "numpy>=1.23", "pyyaml>=6", "streamlit>=1.40", "pandas", "plotly",
+  "rdkit>=2023.9,<=2025.9.3; platform_system == 'Darwin' and platform_machine == 'x86_64'",
+  "rdkit>=2023.9; platform_system != 'Darwin' or platform_machine != 'x86_64'",
+  "py3Dmol>=2.0", "streamlit-ketcher>=0.0.1",
+]
+
+[project.scripts]
+mossbauer = "mossbauer_dft.cli:main"
+
+[project.optional-dependencies]
+gui = []
+test = ["pytest"]
+
+[tool.setuptools.dynamic]
+version = {attr = "mossbauer_dft.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mossbauer_dft = ["data/*.yaml", "data/*.csv", "data/*.md", "data/sites/*.yaml", "data/refsets/*.yaml", "data/refsets/structures/*", "data/refsets/structures/*/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

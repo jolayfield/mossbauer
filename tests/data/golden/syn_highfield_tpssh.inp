@@ -1,0 +1,20 @@
+! UKS TPSSh def2-TZVP NoRIJCOSX DefGrid3 TightSCF SOMF(1X) UNO
+%method
+  SpecialGridAtoms 26
+  SpecialGridIntAcc 7
+end
+%pal nprocs 16 end
+%maxcore 3000
+%scf MaxIter 500 end
+%basis
+  NewGTO Fe "CP(PPP)" end
+end
+* xyzfile 0 4 syn_geom.xyz
+
+%eprnmr
+  gtensor true
+  DTensor ssandso
+  DSOC cp
+  DSS uno
+  Nuclei = all Fe {aiso, adip, aorb, fgrad, rho}
+end

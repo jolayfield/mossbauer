@@ -1,0 +1,10 @@
+! UKS def2-SVP NoRIJCOSX DefGrid3 TightSCF
+%method
+  method dft
+  exchange hyb_mgga_x_mn15
+  correlation mgga_c_mn15
+end
+%pal nprocs 16 end
+%maxcore 3000
+%scf MaxIter 500 end
+* xyzfile 0 4 syn_geom.xyz

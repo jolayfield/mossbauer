@@ -1,0 +1,3183 @@
+schema_version: '1.0'
+created: '2026-10-16'
+delta_convention: delta = alpha*(rho0 - C) + beta; delta vs alpha-Fe at room temperature
+  unless stated; alpha in mm/s per a0^-3 (negative); C in a0^-3 (arbitrary, NOT interchangeable
+  between entries); beta in mm/s
+verification_policy: verified:true only if every numeric calibration constant was
+  read from the paper's full text this session. Anything from snippets/abstracts or
+  secondary papers is verified:false.
+calibrations:
+- id: neese2002_b3lyp_bp86
+  short: Neese 2002
+  authors: Neese, F.
+  journal: Inorg. Chim. Acta
+  year: 2002
+  volume: null
+  pages: null
+  doi: 10.1016/s0020-1693(02)01031-9
+  program: ORCA (per ResearchGate abstract page snippet)
+  functional:
+  - B3LYP
+  - BP86
+  basis_fe: 'CP(PPP) core-polarized Fe basis introduced in this work (from citing
+    papers: Römelt 2009, Pápai 2013 ref. to ''CP(PPP) basis developed by F. Neese'')'
+  basis_other: 'TZV(P) (snippet of paper: ''For the ligands the TZV(P) basis'')'
+  grid: integration accuracy increase at Fe discussed (section 'Dependence of electron
+    density on numerical integration accuracy'); value not retrieved
+  relativistic: 'non-relativistic (abstract: ''non-relativistically calculated theoretical
+    electron densities'')'
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: ~0.1 mm/s over ~2 mm/s range (abstract)
+  n_training: 15
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: X-ray structures with only H positions optimized (snippet)
+  c_convention_note: Original δ=α(ρ0−C)+β form; numeric parameters not retrieved.
+    C=11580 (a0^-3) for B3LYP/TZVP and 11810 for B3LYP/CP(PPP) appear in later papers
+    (see romelt2009 secondary entries) — do not assume these are Neese 2002 values.
+  verified: false
+  verification_note: Full text closed-access; only abstract and search-result snippets
+    (abstract text, 'series of 15 iron containing compounds', 'TZV(P)', 'ORCA') seen.
+    alpha/C/beta NOT retrieved.
+  location_in_paper: Table 1 (15 compounds); abstract
+  notes_bib: Volume/pages not retrieved; DOI resolved via Crossref (Neese, 2002).
+- id: romelt2009_primary
+  short: Römelt, Ye, Neese 2009
+  authors: Römelt, M.; Ye, S.; Neese, F.
+  journal: Inorg. Chem.
+  year: 2009
+  volume: '48'
+  pages: 784-785
+  doi: 10.1021/ic801535v
+  program: ORCA
+  functional:
+  - BP86
+  - TPSS
+  - TPSSh
+  - B3LYP
+  - B2PLYP
+  basis_fe: not retrieved (CP(PPP) per secondary citations)
+  basis_other: not retrieved
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: 20
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: See secondary entries below for values quoted by citing papers.
+  verified: false
+  verification_note: 'Closed access (publisher 403, no OA). Only abstract seen: five
+    functionals calibrated on 20 iron-containing molecules. All numeric parameters
+    unverified.'
+  location_in_paper: Table 3 (B3LYP), per a citing-paper snippet; Table S3
+- id: romelt2009_tpssh_cppp_via_sciadv2020
+  short: Römelt 2009 TPSSh/CP(PPP) as quoted in Sci. Adv. 2020
+  authors: (quoting) Römelt, Ye, Neese
+  journal: Sci. Adv. (citing paper; ref 41 = Römelt 2009)
+  year: 2020
+  volume: '6'
+  pages: eaaz8181
+  doi: 10.1126/sciadv.aaz8181
+  program: not stated in snippet
+  functional:
+  - TPSSh
+  basis_fe: CP(PPP)
+  basis_other: def2-TZVP
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: -0.376
+  C: 11810
+  beta: 4.13
+  units: 'alpha: mm s^-1 a0^3 (unit not stated in snippet); C: a0^-3; beta: mm s^-1
+    (assumed)'
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: C=11810 convention (Neese-style, nonrelativistic density).
+  verified: false
+  verification_note: 'SECONDARY: values read from a web-search snippet of the Methods
+    of Sci. Adv. 2020;6:eaaz8181 (parameters ''taken from'' its ref 41, stated to
+    be Römelt/Ye/Neese). Not checked against Römelt 2009 itself.'
+  location_in_paper: Sci. Adv. Methods, 'Computational details'
+- id: b3lyp_cppp_secondary_snippet
+  short: B3LYP/CP(PPP) and B3LYP/TZVP regression laws quoted in a citing paper
+  authors: (unidentified citing paper; snippet from ResearchGate page of Römelt 2009)
+  journal: null
+  year: null
+  volume: null
+  pages: null
+  doi: null
+  program: ORCA (assumed)
+  functional:
+  - B3LYP
+  basis_fe: TZVP and CP(PPP) (two laws)
+  basis_other: TZVP
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha:
+    B3LYP/TZVP: -0.298
+    B3LYP/CP(PPP): -0.366
+  C:
+    B3LYP/TZVP: 11580
+    B3LYP/CP(PPP): 11810
+  beta:
+    B3LYP/TZVP: 1.118
+    B3LYP/CP(PPP): 2.852
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: Shows the C=11580 / 11810 convention used in ORCA-era papers
+    (ρ0 in a0^-3, non-relativistic).
+  verified: false
+  verification_note: Snippet only; citing paper not identified, so it is unclear whether
+    these are that paper's own fits or Römelt 2009's. Do not use as a published calibration
+    without checking the primary source.
+  location_in_paper: '''see Table S3'' of the unidentified citing paper'
+- id: sinnecker2005
+  short: Sinnecker et al. 2005
+  authors: Sinnecker, S.; Slep, L. D.; Bill, E.; Neese, F.
+  journal: Inorg. Chem.
+  year: 2005
+  volume: '44'
+  pages: 2245-2254
+  doi: 10.1021/ic048609e
+  program: ORCA (assumed; not verified)
+  functional: null
+  basis_fe: null
+  basis_other: null
+  grid: null
+  relativistic: nonrelativistic vs quasi-relativistic hybrid DFT compared (title)
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: null
+  verified: false
+  verification_note: Closed access (publisher 403). Only title/ref metadata seen (title
+    confirmed via Crossref). No numerical values retrieved. Hyperfine (A-tensor) benchmarking
+    paper; relevant to the project's later high-field/spin-Hamiltonian work.
+  location_in_paper: null
+- id: bochevarov2010
+  short: Bochevarov, Friesner, Lippard 2010
+  authors: Bochevarov, A. D.; Friesner, R. A.; Lippard, S. J.
+  journal: J. Chem. Theory Comput.
+  year: 2010
+  volume: '6'
+  pages: 3735-3749
+  doi: 10.1021/ct100398m
+  program: Jaguar 7.5 (locally modified); analytic integrals (no pseudospectral) for
+    single points
+  functional:
+  - B3LYP
+  - BPW91
+  - OLYP
+  - O3LYP
+  - M06
+  - M06-2X
+  - PBE
+  - SVWN5
+  basis_fe: Wachters (62111111/331211/3111) and uncontracted Partridge-1 (20s,12p,9d)
+  basis_other: 'cc-pVDZ (single points); geometry opt: B3LYP/LACVP* (Fe)/6-31G*'
+  grid: fine grids for densities on Fe; tight SCF (1e-8 Eh) for Partridge
+  relativistic: none (non-relativistic)
+  solvation: none (gas-phase single points; COSMO only in MMOH comparison by Han/Noodleman)
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE:
+    isomer_shift_MUE_mm_s:
+      B3LYP/Wachters:
+        '+2': 0.0283
+        +3,+4: 0.0285
+        all: 0.0324
+      B3LYP/Partridge-1:
+        '+2': 0.0272
+        +3,+4: 0.0238
+        all: 0.0296
+      BPW91/Partridge-1 all: 0.0733
+      M06/Partridge-1 all: 0.045
+      O3LYP/Partridge-1 all: 0.042
+    quadrupole_MUE_mm_s:
+      B3LYP/Partridge-1:
+        <2.0: 0.0952
+        all: 0.337
+      O3LYP/Partridge-1:
+        <2.0: 0.0937
+        all: 0.291
+      M06-2X/Partridge-1 all: 0.532
+  SD: null
+  n_training: 31 compounds / 35 signals (17 Fe(II) signals, 18 Fe(III)/Fe(IV) signals)
+  fe_oxidation_range: +2 to +4
+  spin_range: total spin up to 5/2 (low and high spin)
+  geometry: X-ray-based and DFT-optimized both tested
+  c_convention_note: Separate lines per oxidation state (+2 vs +3/+4) are advocated;
+    slope/intercept given only in Supporting Information.
+  verified: false
+  verification_note: Performance statistics (Table 2, Table 4) and method details
+    verified from PMC full text; alpha/C/beta are NOT in the main text (SI only) and
+    are therefore null. Entry marked verified:false because the calibration constants
+    could not be verified.
+  location_in_paper: Table 1 (data set), Table 2 (IS MUE), Table 4 (QS MUE); Computational
+    details
+  ref_standard_note: Reference standard (α-Fe) not stated in retrieved text; spectra
+    at liquid-He temperature.
+- id: papai_vanko2013
+  short: Pápai & Vankó 2013
+  authors: Pápai, M.; Vankó, G.
+  journal: J. Chem. Theory Comput.
+  year: 2013
+  volume: '9'
+  pages: 5004-5020
+  doi: 10.1021/ct4007585
+  program: ORCA 2.8 (GTO); ADF 2012.01 (STO-TZP comparison and degenerate states)
+  functional:
+  - RPBE
+  - OLYP
+  - B3LYP
+  - B3LYP*
+  - TPSS
+  - TPSSh
+  basis_fe: CP(PPP) (GTO) and STO-TZP
+  basis_other: TZVP (ORCA); geometries BP86/TZVP
+  grid: integration accuracy 7.0 at Fe
+  relativistic: none (nonrelativistic; stated that relativistic effects do not improve
+    quality)
+  solvation: gas phase and COSMO (both reported; COSMO improves IS MAE by 0.01-0.02
+    mm/s)
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2:
+    CP(PPP) gas; COSMO:
+      RPBE: 0.919; 0.944
+      OLYP: 0.900; 0.940
+      B3LYP: 0.975; 0.983
+      B3LYP*: 0.964; 0.979
+      TPSS: 0.937; 0.958
+      TPSSh: 0.965; 0.979
+  MAE:
+    CP(PPP) gas; COSMO (mm/s):
+      RPBE: 0.10; 0.08
+      OLYP: 0.11; 0.09
+      B3LYP: 0.06; 0.05
+      B3LYP*: 0.07; 0.05
+      TPSS: 0.09; 0.07
+      TPSSh: 0.06; 0.05
+    max_dev CP(PPP) gas; COSMO (mm/s):
+      B3LYP: 0.15; 0.14
+      TPSSh: 0.21; 0.15
+    STO-TZP B3LYP gas; COSMO R2: 0.976; 0.984, MAE 0.05; 0.05, maxdev 0.17; 0.12
+    quadrupole CP(PPP) gas; COSMO MAE (mm/s):
+      B3LYP: 0.24; 0.25
+      B3LYP*: 0.24; 0.22
+      TPSSh: 0.21; 0.19
+      RPBE: 0.31; 0.24
+  SD: null
+  n_training: 66
+  fe_oxidation_range: '0 to +6 (Table 1: oxidation states 0,2,3,4,5,6 as tabulated)'
+  spin_range: S = 0 to 5/2
+  geometry: BP86/TZVP optimized (gas phase or COSMO)
+  c_convention_note: Linear fit of δ(4.2 K-corrected) vs ρ0; alpha/beta only in Figures
+    1-2 and SI (parameters 'presented in the SI'). C convention not stated in main
+    text.
+  verified: false
+  verification_note: 'R2/MAE/max-dev, method and N verified from PMC full text; alpha,
+    beta, C are in figures/SI that could not be retrieved -> null. Also verified:
+    ΔEQ recipe (TPSSh+COSMO default; B3LYP for S=2 Fe(II) and S=3/2 Fe(III); COSMO-RPBE
+    for π-bonded/square-planar S=1/distorted open-shell), recipe MAE 0.12 mm/s, max
+    0.55.'
+  location_in_paper: Table 2 (IS stats), Table 3 (QS stats), Table 1 (66 complexes),
+    section 2.1
+- id: mcwilliams2017_b3lyp_def2tzvp
+  short: McWilliams et al. 2017 (def2-TZVP)
+  authors: McWilliams, S. F.; Brennan-Wydra, E.; MacLeod, K. C.; Holland, P. L.
+  journal: ACS Omega
+  year: 2017
+  volume: '2'
+  pages: 2594-2606
+  doi: 10.1021/acsomega.7b00595
+  program: ORCA 3.0.3
+  functional:
+  - B3LYP
+  basis_fe: def2-TZVP (ZORA-recontracted version used for geometry; all atoms def2-TZVP)
+  basis_other: def2-TZVP
+  grid: ORCA grid4 (all DFT); very dense grid 7 on Fe for Mössbauer; TightSCF; UKS;
+    no RI for Mössbauer single points
+  relativistic: 'ZORA used in BP86-D3BJ geometry optimizations (text states ZORA and
+    recontracted def2-TZVP ''on all atoms''); Mössbauer property step: not explicitly
+    stated for ZORA in retrieved passage'
+  solvation: COSMO, toluene (ε = 2.4)
+  alpha: -0.32
+  alpha_uncertainty: 0.02
+  C: 13780
+  beta: 1.18
+  beta_uncertainty: 0.04
+  units: 'alpha: a0^3 mm s^-1; beta: mm s^-1; C: a0^-3'
+  R2: 0.985
+  MAE: 0.038
+  max_dev: 0.11
+  SD: 0.050 (Table 4, training set)
+  n_training: 9
+  fe_oxidation_range: 0 to +3 (training set); test set includes +1, +2, +2.5
+  spin_range: S = 0 to 5/2
+  geometry: BP86-D3BJ/ZORA-def2-TZVP optimized from X-ray (COSMO toluene)
+  c_convention_note: 'C = 13780 a0^-3 here: an unrefined constant chosen to keep β
+    small; DIFFERENT from the Neese C=11580/11810 convention because the density is
+    computed on a different basis/ZORA footing. Parameters are only valid with this
+    protocol.'
+  verified: true
+  verification_note: Values read from Table 2 of PMC full text (PMC5494642). A published
+    Correction exists (ACS Omega 2017, 2, 5973); the PMC text fetched appears to be
+    the version-2 record carrying the correction notice — check that Table 2 is unchanged
+    in the corrected version.
+  location_in_paper: Table 2 (fit), Table 3 (test set), Table 4 (errors); Computational
+    Details
+- id: mcwilliams2017_b3lyp_cppp
+  short: McWilliams et al. 2017 (CP(PPP))
+  authors: McWilliams, S. F.; Brennan-Wydra, E.; MacLeod, K. C.; Holland, P. L.
+  journal: ACS Omega
+  year: 2017
+  volume: '2'
+  pages: 2594-2606
+  doi: 10.1021/acsomega.7b00595
+  program: ORCA 3.0.3
+  functional:
+  - B3LYP
+  basis_fe: CP(PPP)
+  basis_other: def2-TZVP
+  grid: ORCA grid4; grid 7 on Fe; TightSCF; UKS; no RI for Mössbauer single points
+  relativistic: see def2-TZVP entry
+  solvation: COSMO, toluene (ε = 2.4)
+  alpha: -0.3
+  alpha_uncertainty: 0.02
+  C: 14760
+  beta: 1.49
+  beta_uncertainty: 0.06
+  units: 'alpha: a0^3 mm s^-1; beta: mm s^-1; C: a0^-3'
+  R2: 0.983
+  MAE: 0.04
+  max_dev: 0.13
+  SD: 0.053 (Table 4, training set)
+  n_training: 9
+  fe_oxidation_range: 0 to +3 (training); +1 to +2.5 (test)
+  spin_range: S = 0 to 5/2
+  geometry: BP86-D3BJ/ZORA-def2-TZVP optimized from X-ray (COSMO toluene)
+  c_convention_note: C = 14760 (different from 11810 CP(PPP) convention of Neese/Römelt).
+  verified: true
+  verification_note: 'Values read from Table 2 of PMC full text; same Correction caveat
+    as the def2-TZVP entry. Whole-set MAE (34 compounds incl. test): 0.054 (def2-TZVP)
+    / 0.053 (CP(PPP)); non-diketiminate MAE 0.097 / 0.091; ΔEQ MAE all compounds 0.30
+    / 0.33 mm/s (Table 6).'
+  location_in_paper: Table 2, Table 4, Table 6
+- id: comasvila_salvador2021_b3lyp
+  short: Comas-Vilà & Salvador 2021
+  authors: Comas-Vilà, G.; Salvador, P.
+  journal: J. Chem. Theory Comput.
+  year: 2021
+  volume: '17'
+  pages: 7724-7731
+  doi: 10.1021/acs.jctc.1c00722
+  program: Gaussian 09 (density); APOST-3D (sphere-integrated density)
+  functional:
+  - B3LYP
+  - PW91
+  basis_fe: def2-TZVP (conventional)
+  basis_other: def2-TZVP
+  grid: spherical grid 30 radial x 110 angular for the sphere integral
+  relativistic: none
+  solvation: gas phase; PCM (ε=80) test judged discouraging
+  alpha: null
+  C: null
+  beta: null
+  units: mm/s per density integrated over sphere (not ρ(0))
+  R2: 0.976
+  MAE: 0.055
+  SD: null
+  q2: 0.975
+  n_training: 69 compounds / 103 signals (LOOCV q2 = 0.975)
+  fe_oxidation_range: +2 to +6 (formal +2,+2.5,+3,+3.5,+4,+6)
+  spin_range: various
+  geometry: X-ray structures
+  c_convention_note: 'Uses ⟨ρ⟩ averaged over a sphere of radius 0.06 au around Fe,
+    NOT ρ(0): the calibration (a, b) is not interchangeable with ρ(0)-based lines.
+    Coefficients a, b appear only in Figure 2 (not retrievable as text).'
+  verified: false
+  verification_note: r2, q2, MAE, N, method verified from PMC full text; coefficients
+    not in text -> null.
+  location_in_paper: Abstract; Tables 1-3 (ρ(0) and ⟨ρ⟩0.06 values per complex, with
+    CSD refcodes); Fig. 2
+- id: gallenkamp2021
+  short: Gallenkamp et al. 2021
+  authors: Gallenkamp, C.; Kramm, U. I.; Proppe, J.; Krewald, V.
+  journal: Int. J. Quantum Chem.
+  year: 2021
+  volume: null
+  pages: e26394
+  doi: 10.1002/qua.26394
+  program: ORCA 4.2.1 (from Authorea preprint snippet)
+  functional:
+  - TPSSh
+  - B3LYP
+  - PBE0
+  basis_fe: CP(PPP)
+  basis_other: def2-TZVP
+  grid: integration grid 7.0 on Fe
+  relativistic: ZORA (not confirmed for the Mössbauer step in retrieved snippets)
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: correlation R-values 0.989 (TPSSh), 0.985 (B3LYP), 0.988 (PBE0) — reported as
+    R, not R^2 (snippet)
+  MAE: null
+  SD: null
+  trust_region: 'B3LYP: 0.13 mm/s (IS), 0.36 mm/s (ΔEQ) in published abstract; the
+    preprint version quoted 0.45 mm/s for ΔEQ'
+  n_training: 20
+  fe_oxidation_range: FeN4-6 environments
+  spin_range: various
+  geometry: null
+  c_convention_note: Fit data public via an interactive notebook (not retrieved).
+  verified: false
+  verification_note: Closed-access full text not retrieved; statements from abstract/search
+    snippets of the Wiley page and preprint only. Fit constants not retrieved. Excludes
+    complexes 9 and 10 from fits.
+  location_in_paper: Table 4 (fit characteristics)
+- id: hedegard2014
+  short: Hedegård et al. 2014
+  authors: Hedegård, E. D.; Knecht, S.; Ryde, U.; Kongsted, J.; Saue, T.
+  journal: Phys. Chem. Chem. Phys.
+  year: 2014
+  volume: '16'
+  pages: 4853-4863
+  doi: 10.1039/c3cp54393e
+  program: DIRAC (assumed; not verified)
+  functional:
+  - 12 functionals incl. PWLDA, BP86, BLYP, PW91, PBE, M06-L, TPSS, B3LYP, B3PW91,
+    PBE0, M06, TPSSh (per a snippet; may refer to a different paper — see note)
+  basis_fe: null
+  basis_other: null
+  grid: null
+  relativistic: eXact 2-Component (X2C) Hamiltonian, finite-nucleus model
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: Isomer shift written as δ = α(ρ̄_e − ρ̄_ref) with ρ̄ the nucleus-averaged
+    effective density (snippet), i.e. different 'C' meaning (reference density).
+  verified: false
+  verification_note: Closed access. Only abstract and snippets. The 'twelve functionals'
+    snippet is from a PubMed/ResearchGate record that may be a different Filatov/Hedegård
+    paper — not confirmed. No numerical constants retrieved.
+  location_in_paper: null
+- id: kurian_filatov2008_jctc
+  short: Kurian & Filatov 2008
+  authors: Kurian, R.; Filatov, M.
+  journal: J. Chem. Theory Comput.
+  year: 2008
+  volume: '4'
+  pages: 278-285
+  doi: 10.1021/ct700227s
+  program: null
+  functional: null
+  basis_fe: null
+  basis_other: null
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: null
+  verified: false
+  verification_note: Closed access; title/metadata only (Crossref + McWilliams ref
+    list entry 9e). No values.
+  location_in_paper: null
+- id: kurian_filatov2010_pccp
+  short: Kurian & Filatov 2010
+  authors: Kurian, R.; Filatov, M.
+  journal: Phys. Chem. Chem. Phys.
+  year: 2010
+  volume: null
+  pages: null
+  doi: 10.1039/b918655g
+  program: null
+  functional: null
+  basis_fe: null
+  basis_other: null
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: null
+  verified: false
+  verification_note: 'Closed access; title ''Calibration of 57Fe isomer shift from
+    ab initio calculations: can theory and experiment reach an agreement?'' confirmed
+    via Crossref only. No values.'
+  location_in_paper: null
+- id: santra_neese_pantazis2024
+  short: Santra, Neese, Pantazis 2024 (MPMIC80)
+  authors: Santra, G.; Neese, F.; Pantazis, D. A.
+  journal: Phys. Chem. Chem. Phys.
+  year: 2024
+  volume: '26'
+  pages: 23322-23334
+  doi: 10.1039/d4cp00431k
+  program: ORCA
+  functional:
+  - B3LYP (basis-set comparison table)
+  basis_fe:
+    CP(PPP):
+      a: -0.3
+      b: 0.9704
+      C: 14362
+      R2: 0.956
+      MAD: 0.054
+      max_dev: 0.191
+      SD: 0.07
+    x2c-TZVPPall:
+      a: -0.22
+      b: 1.0294
+      C: 13651
+      R2: 0.82
+      MAD: 0.108
+      max_dev: 0.346
+      SD: 0.142
+    x2c-TZVPPall-s:
+      a: -0.22
+      b: 0.8917
+      C: 13652
+      R2: 0.806
+      MAD: 0.113
+      max_dev: 0.356
+      SD: 0.147
+    aug-cc-pVTZ-J:
+      a: -0.41
+      b: 1.3456
+      C: 10511
+      R2: 0.956
+      MAD: 0.054
+      max_dev: 0.181
+      SD: 0.07
+  basis_other: def2-TZVP for ligand atoms (CP(PPP) comparison per Methodology snippet)
+  grid: null
+  relativistic: scalar X2C with finite nucleus (abstract) — which rows of the quoted
+    table are X2C vs nonrelativistic could not be confirmed
+  solvation: null
+  alpha: -0.3
+  C: 14362
+  beta: 0.9704
+  units: 'a: mm s^-1 a.u.^3 (assumed); C: a.u.^-3; b: mm s^-1'
+  R2: 0.956
+  MAE: 0.054
+  max_dev: 0.191
+  SD: 0.07
+  n_training: 80
+  fe_oxidation_range: 0 to higher valent (MPMIC80 includes Fe(0), Fe(I) entries 5-7)
+  spin_range: various
+  geometry: reoptimized (see paper)
+  c_convention_note: 'C=14362 for CP(PPP) here (80-complex set). Abstract: hybrids
+    with ca. 25-30% exact exchange give the best IS accuracy.'
+  verified: false
+  verification_note: Numbers read from a web-search snippet of the open-access RSC
+    page (table 'Basis set for Fe'); full text and ESI could not be downloaded (pubs.rsc.org
+    403 to scripted client; ESI URL returned 404 after network access was granted).
+    Row-level provenance (which functional/Hamiltonian) not confirmed. The table row
+    shown in the CP(PPP) line is the only one entered as alpha/C/beta above.
+  location_in_paper: Section 4.1.1 table
+- id: casassa_ferrari2016_mention
+  short: Casassa & Ferrari 2016 (mention only)
+  authors: Casassa, S.; Ferrari, A. M.
+  journal: Phys. Chem. Chem. Phys.
+  year: 2016
+  volume: '18'
+  pages: 10201-10206
+  doi: 10.1039/C5CP07882B
+  program: null
+  functional: null
+  basis_fe: null
+  basis_other: null
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: null
+  fe_oxidation_range: null
+  spin_range: null
+  geometry: null
+  c_convention_note: 'Periodic ''calibration of 57Fe Mössbauer constants by first
+    principles''; Grandjean & Long Comment: 10.1039/c6cp02950g. Both appear in the
+    McWilliams 2017 reference list.'
+  verified: false
+  verification_note: Only the reference-list entry seen; not retrieved.
+  location_in_paper: null
+- id: nemykin_hadt2006_mention
+  short: Nemykin & Hadt 2006 (mention only)
+  authors: Nemykin, V. N.; Hadt, R. G.
+  journal: Inorg. Chem.
+  year: 2006
+  volume: '45'
+  pages: 8297-8307
+  doi: 10.1021/ic061176q
+  program: null
+  functional:
+  - B3LYP
+  - BPW91
+  basis_fe: Wachters + polarization (per Comas-Vilà 2021 description)
+  basis_other: null
+  grid: null
+  relativistic: null
+  solvation: null
+  alpha: null
+  C: null
+  beta: null
+  units: null
+  R2: null
+  MAE: null
+  SD: null
+  n_training: 36
+  fe_oxidation_range: ferrocene derivatives (title)
+  spin_range: null
+  geometry: null
+  c_convention_note: HF-exchange influence on IS/ΔEQ in ferrocenes; relevant to the
+    'exact exchange' ΔEQ sensitivity seen in the project.
+  verified: false
+  verification_note: Described secondhand by Comas-Vilà 2021 (36 compounds) and title
+    via McWilliams ref list; no values.
+  location_in_paper: null
+- id: fit_fe1_calib18_b3lyp_49ea7a81_noFeO4
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (16 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: B3LYP
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.4295329532908251
+  C: 11816.0
+  beta: 0.770943090831338
+  n_training: 16
+  stats:
+    n: 16
+    dof: 14
+    resid_sd: 0.0697290610960915
+    r2: 0.9653618698290002
+    mae_fit: 0.052555032481071066
+    rmse_fit: 0.06522556413075056
+    max_abs_resid: 0.15384529176779527
+    loo_mae: 0.060034303430938254
+    loo_rmse: 0.07409918399350549
+    loo_max: 0.1657982131008755
+    se_alpha: 0.02174526075075273
+    se_beta: 0.017432265274022876
+    rho_min: 11814.242807705
+    rho_max: 11817.402680553
+    sxx: 10.282492359232158
+    xbar: -0.14040112337511346
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  - id: FeO4_2m
+    reason: user-excluded
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.346989119994651
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 0.4599154903671123
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 3.0815684274074044
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 3.0265728336936446
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.4199385054841884
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.607258253857017
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.5642682982559925
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.6750953107464395
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.649583764871613
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.87085003922408e-05
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.740603759158012
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.3595577157053632
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 1.9184337556959308e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.8299457753446022
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.729815907333084
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.7166631256442426
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.4295329532908251
+    beta: 0.770943090831338
+    C: 11816.0
+    fingerprint:
+      functional: B3LYP
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 11816.072394113
+    - 11816.183257986
+    - 11816.446237155
+    - 11815.859116728
+    - 11815.688513545
+    - 11816.19478258
+    - 11817.402680553
+    - 11815.380324463
+    - 11815.545525865
+    - 11816.972928255
+    - 11814.553567958
+    - 11816.39871352
+    - 11816.375261439
+    - 11814.242807705
+    - 11815.22360306
+    - 11815.213867101
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 16
+      dof: 14
+      resid_sd: 0.0697290610960915
+      r2: 0.9653618698290002
+      mae_fit: 0.052555032481071066
+      rmse_fit: 0.06522556413075056
+      max_abs_resid: 0.15384529176779527
+      loo_mae: 0.060034303430938254
+      loo_rmse: 0.07409918399350549
+      loo_max: 0.1657982131008755
+      se_alpha: 0.02174526075075273
+      se_beta: 0.017432265274022876
+      rho_min: 11814.242807705
+      rho_max: 11817.402680553
+      sxx: 10.282492359232158
+      xbar: -0.14040112337511346
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 11816.072394113
+      delta_exp: 0.68
+      delta_fit: 0.73984743367359
+      residual: -0.05984743367358991
+      loo_pred: 0.7441385446176122
+      loo_error: -0.06413854461761215
+      leverage: 0.06690377790149997
+      ext_studentized: -0.881414306263774
+      cooks_d: 0.02830291802774696
+      flags: []
+    - name: lxylFeInd
+      rho0: 11816.183257986
+      delta_exp: 0.67
+      delta_fit: 0.6922277468905557
+      residual: -0.022227746890555622
+      loo_pred: 0.6939700773125392
+      loo_error: -0.023970077312539195
+      leverage: 0.07268772642097301
+      ext_studentized: -0.32024520231169834
+      cooks_d: 0.004294793863587632
+      flags: []
+    - name: Cp2Fe
+      rho0: 11816.446237155
+      delta_exp: 0.53
+      delta_fit: 0.5792695277761631
+      residual: -0.04926952777616311
+      loo_pred: 0.5844998195420055
+      loo_error: -0.054499819542005445
+      leverage: 0.09596897402221095
+      ext_studentized: -0.730667827086658
+      cooks_d: 0.02931320801169205
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 11815.859116728
+      delta_exp: 0.86
+      delta_fit: 0.8314570987231129
+      residual: 0.028542901276887078
+      loo_pred: 0.8295542379037788
+      loo_error: 0.030445762096221185
+      leverage: 0.06250002260806904
+      ext_studentized: 0.410011808545366
+      cooks_d: 0.005957667245040432
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 11815.688513545
+      delta_exp: 0.99
+      delta_fit: 0.9047367877578802
+      residual: 0.08526321224211975
+      loo_pred: 0.8987755817637824
+      loo_error: 0.09122441823621763
+      leverage: 0.06534660466303756
+      ext_studentized: 1.295026291774274
+      cooks_d: 0.055922631745584254
+      flags: []
+    - name: FeSPh4
+      rho0: 11816.19478258
+      delta_exp: 0.66
+      delta_fit: 0.6872775539944133
+      residual: -0.02727755399441323
+      loo_pred: 0.6894391582164706
+      loo_error: -0.029439158216470585
+      leverage: 0.07342615594382199
+      ext_studentized: -0.3939455363260741
+      cooks_d: 0.00654400973896793
+      flags: []
+    - name: FeSEt4
+      rho0: 11817.402680553
+      delta_exp: 0.25
+      delta_fit: 0.16844557037794106
+      residual: 0.08155442962205894
+      loo_pred: 0.13447260595840982
+      loo_error: 0.11552739404159018
+      leverage: 0.2940684735544289
+      ext_studentized: 1.4451420440598313
+      cooks_d: 0.4036089524391934
+      flags: []
+    - name: FeCl4_2m
+      rho0: 11815.380324463
+      delta_exp: 1.05
+      delta_fit: 1.0371141543210898
+      residual: 0.012885845678910268
+      loo_pred: 1.035919581047282
+      loo_error: 0.014080418952717944
+      leverage: 0.08483932742477371
+      ext_studentized: 0.18639646138691277
+      cooks_d: 0.0017296998214637684
+      flags: []
+    - name: FeBr4_2m
+      rho0: 11815.545525865
+      delta_exp: 1.12
+      delta_fit: 0.9661547082322048
+      residual: 0.15384529176779527
+      loo_pred: 0.9542017868991246
+      loo_error: 0.1657982131008755
+      leverage: 0.072093185502598
+      ext_studentized: 2.791187763962863
+      cooks_d: 0.20379629123508225
+      flags:
+      - studentized_residual>2.5
+    - name: FeCl4_m
+      rho0: 11816.972928255
+      delta_exp: 0.36
+      delta_fit: 0.3530383441212215
+      residual: 0.0069616558787785054
+      loo_pred: 0.3514785327609769
+      loo_error: 0.008521467239023084
+      leverage: 0.18304492835480615
+      ext_studentized: 0.10648701032192459
+      cooks_d: 0.00136687508417721
+      flags: []
+    - name: FeH2O6_2p
+      rho0: 11814.553567958
+      delta_exp: 1.39
+      delta_fit: 1.3922333175657706
+      residual: -0.0022333175657707205
+      loo_pred: 1.3928943438350188
+      loo_error: -0.0028943438350188533
+      leverage: 0.22838553638659617
+      ext_studentized: -0.03513700692871713
+      cooks_d: 0.00019674840043698203
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 11816.39871352
+      delta_exp: 0.49
+      delta_fit: 0.5996824950685617
+      residual: -0.10968249506856176
+      loo_pred: 0.6106317528747038
+      loo_error: -0.12063175287470385
+      leverage: 0.09076596787509514
+      ext_studentized: -1.7710352331475425
+      cooks_d: 0.13582780720240667
+      flags: []
+    - name: FeCl6_3m
+      rho0: 11816.375261439
+      delta_exp: 0.56
+      delta_fit: 0.6097559366816807
+      residual: -0.04975593668168066
+      loo_pred: 0.6145785075460868
+      loo_error: -0.05457850754608673
+      leverage: 0.08836025536854358
+      ext_studentized: -0.7349665922921772
+      cooks_d: 0.027067157068554653
+      flags: []
+    - name: FeF6_4m
+      rho0: 11814.242807705
+      delta_exp: 1.48
+      delta_fit: 1.5257150868022211
+      residual: -0.04571508680222114
+      loo_pred: 1.546905334482262
+      loo_error: -0.0669053344822621
+      leverage: 0.3167198526697219
+      ext_studentized: -0.7820545553143886
+      cooks_d: 0.14579383120311204
+      flags: []
+    - name: FephenCl2
+      rho0: 11815.22360306
+      delta_exp: 1.05
+      delta_fit: 1.1044311613956126
+      residual: -0.05443116139561255
+      loo_pred: 1.1106028195076871
+      loo_error: -0.06060281950768709
+      leverage: 0.10183780494390782
+      ext_studentized: -0.8136742380894468
+      cooks_d: 0.038462460125901855
+      flags: []
+    - name: FepyCl2
+      rho0: 11815.213867101
+      delta_exp: 1.16
+      delta_fit: 1.1086130766179814
+      residual: 0.05138692338201856
+      loo_pred: 1.1027091767060193
+      loo_error: 0.05729082329398061
+      leverage: 0.10305140635991611
+      ext_studentized: 0.7665903581958938
+      cooks_d: 0.03478295052785568
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: noFeO4
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: true
+- id: fit_fe1_calib18_b3lyp_e5d3c55c_all
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (17 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: B3LYP
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.3743049952054319
+  C: 11816.0
+  beta: 0.7858661612178833
+  n_training: 17
+  stats:
+    n: 17
+    dof: 15
+    resid_sd: 0.08695294937734935
+    r2: 0.9763038025802439
+    mae_fit: 0.07045541418040446
+    rmse_fit: 0.08167807362239023
+    max_abs_resid: 0.16402189985992832
+    loo_mae: 0.092143016507345
+    loo_rmse: 0.1265871115574108
+    loo_max: 0.3952976745425886
+    se_alpha: 0.015056597219409065
+    se_beta: 0.021089187925988045
+    rho_min: 11814.242807705
+    rho_max: 11820.810435962
+    sxx: 33.351469155390355
+    xbar: 0.15082458752926065
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.346989119994651
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 0.4599154903671123
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 3.0815684274074044
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 3.0265728336936446
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.4199385054841884
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.607258253857017
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.5642682982559925
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.6750953107464395
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.649583764871613
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.87085003922408e-05
+    deq_exp: null
+  - id: FeO4_2m
+    deq_calc: 7.687023161864612e-06
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.740603759158012
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.3595577157053632
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 1.9184337556959308e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.8299457753446022
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.729815907333084
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.7166631256442426
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeO4_2m
+    flags:
+    - high_leverage_single_Fe(VI)_point
+    - delta_T_unverified
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.3743049952054319
+    beta: 0.7858661612178833
+    C: 11816.0
+    fingerprint:
+      functional: B3LYP
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeO4_2m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 11816.072394113
+    - 11816.183257986
+    - 11816.446237155
+    - 11815.859116728
+    - 11815.688513545
+    - 11816.19478258
+    - 11817.402680553
+    - 11815.380324463
+    - 11815.545525865
+    - 11816.972928255
+    - 11820.810435962
+    - 11814.553567958
+    - 11816.39871352
+    - 11816.375261439
+    - 11814.242807705
+    - 11815.22360306
+    - 11815.213867101
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - -0.9
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 17
+      dof: 15
+      resid_sd: 0.08695294937734935
+      r2: 0.9763038025802439
+      mae_fit: 0.07045541418040446
+      rmse_fit: 0.08167807362239023
+      max_abs_resid: 0.16402189985992832
+      loo_mae: 0.092143016507345
+      loo_rmse: 0.1265871115574108
+      loo_max: 0.3952976745425886
+      se_alpha: 0.015056597219409065
+      se_beta: 0.021089187925988045
+      rho_min: 11814.242807705
+      rho_max: 11820.810435962
+      sxx: 33.351469155390355
+      xbar: 0.15082458752926065
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 11816.072394113
+      delta_exp: 0.68
+      delta_fit: 0.758768683098527
+      residual: -0.07876868309852691
+      loo_pred: 0.7637081298500915
+      loo_error: -0.08370812985009146
+      leverage: 0.05900796924277272
+      ext_studentized: -0.9296106349020788
+      cooks_d: 0.02734307266456702
+      flags: []
+    - name: lxylFeInd
+      rho0: 11816.183257986
+      delta_exp: 0.67
+      delta_fit: 0.717271781646732
+      residual: -0.04727178164673196
+      loo_pred: 0.720227951233085
+      loo_error: -0.05022795123308499
+      leverage: 0.05885507001141481
+      ext_studentized: -0.5471446805557195
+      cooks_d: 0.009819201624314077
+      flags: []
+    - name: Cp2Fe
+      rho0: 11816.446237155
+      delta_exp: 0.53
+      delta_fit: 0.6188373650551844
+      residual: -0.08883736505518436
+      loo_pred: 0.6246528517236114
+      loo_error: -0.09465285172361138
+      leverage: 0.061440163318143975
+      ext_studentized: -1.058831303423326
+      cooks_d: 0.03640165562914334
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 11815.859116728
+      delta_exp: 0.86
+      delta_fit: 0.8385994736686654
+      residual: 0.0214005263313346
+      loo_pred: 0.8372001330787315
+      loo_error: 0.022799866921268452
+      leverage: 0.06137494551026218
+      ext_studentized: 0.2459510573561844
+      cooks_d: 0.002109876879493477
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 11815.688513545
+      delta_exp: 0.99
+      delta_fit: 0.9024570972634789
+      residual: 0.0875429027365211
+      loo_pred: 0.8963479905305678
+      loo_error: 0.0936520094694322
+      leverage: 0.0652319877333256
+      ext_studentized: 1.0444724050900682
+      cooks_d: 0.03783521293154827
+      flags: []
+    - name: FeSPh4
+      rho0: 11816.19478258
+      delta_exp: 0.66
+      delta_fit: 0.7129580685449528
+      residual: -0.052958068544952774
+      loo_pred: 0.7162714118258049
+      loo_error: -0.05627141182580486
+      leverage: 0.05888146704242913
+      ext_studentized: -0.6146474990318411
+      cooks_d: 0.012329788143183555
+      flags: []
+    - name: FeSEt4
+      rho0: 11817.402680553
+      delta_exp: 0.25
+      delta_fit: 0.26083582355272783
+      residual: -0.01083582355272783
+      loo_pred: 0.2621180632723189
+      loo_error: -0.012118063272318902
+      leverage: 0.10581226477995276
+      ext_studentized: -0.12738937316898008
+      cooks_d: 0.0010275520045855764
+      flags: []
+    - name: FeCl4_2m
+      rho0: 11815.380324463
+      delta_exp: 1.05
+      delta_fit: 1.0178138101236474
+      residual: 0.03218618987635269
+      loo_pred: 1.015142922916449
+      loo_error: 0.034857077083551014
+      leverage: 0.07662395790664808
+      ext_studentized: 0.37400132128966995
+      cooks_d: 0.006156698469060925
+      flags: []
+    - name: FeBr4_2m
+      rho0: 11815.545525865
+      delta_exp: 1.12
+      delta_fit: 0.9559781001400718
+      residual: 0.16402189985992832
+      loo_pred: 0.9436685518524071
+      loo_error: 0.17633144814759305
+      leverage: 0.06980914871952479
+      ext_studentized: 2.189158155136261
+      cooks_d: 0.14354010508249276
+      flags: []
+    - name: FeCl4_m
+      rho0: 11816.972928255
+      delta_exp: 0.36
+      delta_fit: 0.42169425539498573
+      residual: -0.06169425539498574
+      loo_pred: 0.4269925732136184
+      loo_error: -0.0669925732136184
+      leverage: 0.07908813715421367
+      ext_studentized: -0.7276642002366214
+      cooks_d: 0.023472861413816774
+      flags: []
+    - name: FeO4_2m
+      rho0: 11820.810435962
+      delta_exp: -0.9
+      delta_fit: -1.014704048474282
+      residual: 0.11470404847428195
+      loo_pred: -1.2952976745425886
+      loo_error: 0.3952976745425886
+      leverage: 0.7098286788380208
+      ext_studentized: 3.0537795718435614
+      cooks_d: 7.335055938329501
+      flags:
+      - studentized_residual>2.5
+      - cooks_distance>1
+    - name: FeH2O6_2p
+      rho0: 11814.553567958
+      delta_exp: 1.39
+      delta_fit: 1.3272728997634098
+      residual: 0.06272710023659012
+      loo_pred: 1.3174563871146545
+      loo_error: 0.07254361288534539
+      leverage: 0.13531877250544294
+      ext_studentized: 0.7649860175413717
+      cooks_d: 0.04709315432862521
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 11816.39871352
+      delta_exp: 0.49
+      delta_fit: 0.6366256990257718
+      residual: -0.14662569902577183
+      loo_pred: 0.6460953805483107
+      loo_error: -0.15609538054831074
+      leverage: 0.060665994658360214
+      ext_studentized: -1.8813980759720899
+      cooks_d: 0.09775225697696172
+      flags: []
+    - name: FeCl6_3m
+      rho0: 11816.375261439
+      delta_exp: 0.56
+      delta_fit: 0.6454039300923594
+      residual: -0.08540393009235936
+      loo_pred: 0.6508875257740131
+      loo_error: -0.09088752577401304
+      leverage: 0.06033386468554895
+      ext_studentized: -1.0141919824926218
+      cooks_d: 0.03295877607944883
+      flags: []
+    - name: FeF6_4m
+      rho0: 11814.242807705
+      delta_exp: 1.48
+      delta_fit: 1.4435920147725754
+      residual: 0.03640798522742461
+      loo_pred: 1.4362414546341897
+      loo_error: 0.04375854536581025
+      leverage: 0.16797999286624432
+      ext_studentized: 0.44661760689616786
+      cooks_d: 0.02127084196825636
+      flags: []
+    - name: FephenCl2
+      rho0: 11815.22360306
+      delta_exp: 1.05
+      delta_fit: 1.0764754141221957
+      residual: -0.026475414122195673
+      loo_pred: 1.0789222888390264
+      loo_error: -0.028922288839026367
+      leverage: 0.08460169699738182
+      ext_studentized: -0.3084912669765046
+      cooks_d: 0.00467999901586915
+      flags: []
+    - name: FepyCl2
+      rho0: 11815.213867101
+      delta_exp: 1.16
+      delta_fit: 1.0801196322089939
+      residual: 0.07988036779100605
+      loo_pred: 1.0726851300706042
+      loo_error: 0.08731486992939574
+      leverage: 0.08514588803031327
+      ext_studentized: 0.9578132596662186
+      cooks_d: 0.042928080662965336
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: all17
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: false
+- id: fit_fe1_calib18_tpssh_cc473272_noFeO4
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (16 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: TPSSh
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.45065240404509027
+  C: 11819.0
+  beta: 0.8888786445054645
+  n_training: 16
+  stats:
+    n: 16
+    dof: 14
+    resid_sd: 0.06489057942309973
+    r2: 0.9700021513757713
+    mae_fit: 0.0459252835668052
+    rmse_fit: 0.060699578957620556
+    max_abs_resid: 0.1328546916314337
+    loo_mae: 0.05266305733226585
+    loo_rmse: 0.06884577252731348
+    loo_max: 0.14366543997928727
+    se_alpha: 0.021180508393932304
+    se_beta: 0.01622264485577493
+    rho_min: 11817.562435599
+    rho_max: 11820.553723497
+    sxx: 9.386215990187386
+    xbar: 0.1278782582500071
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  - id: FeO4_2m
+    reason: user-excluded
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.1144770363914849
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 0.5537334981840175
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 2.6843907202085506
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 2.8184866110311892
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.247175616964271
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.3931281965812565
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.56963794935464
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.573172289726194
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.53557046897414
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.821351386303604e-05
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.6419773102556112
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.32141601383097784
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 1.836927262177407e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.749402650711279
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.5328783460135873
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.5365474236599836
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.45065240404509027
+    beta: 0.8888786445054645
+    C: 11819.0
+    fingerprint:
+      functional: TPSSh
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 11819.402350248
+    - 11819.489876397
+    - 11819.812179237
+    - 11819.124082931
+    - 11818.94144628
+    - 11819.431166498
+    - 11820.553723497
+    - 11818.638960014
+    - 11818.781945768
+    - 11820.158004777
+    - 11817.870876171
+    - 11819.606253267
+    - 11819.575843375
+    - 11817.562435599
+    - 11818.559959377
+    - 11818.536948696
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 16
+      dof: 14
+      resid_sd: 0.06489057942309973
+      r2: 0.9700021513757713
+      mae_fit: 0.0459252835668052
+      rmse_fit: 0.060699578957620556
+      max_abs_resid: 0.1328546916314337
+      loo_mae: 0.05266305733226585
+      loo_rmse: 0.06884577252731348
+      loo_max: 0.14366543997928727
+      se_alpha: 0.021180508393932304
+      se_beta: 0.01622264485577493
+      rho_min: 11817.562435599
+      rho_max: 11820.553723497
+      sxx: 9.386215990187386
+      xbar: 0.1278782582500071
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 11819.402350248
+      delta_exp: 0.68
+      delta_fit: 0.7075585379763547
+      residual: -0.027558537976354658
+      loo_pred: 0.7096496098465581
+      loo_error: -0.029649609846558067
+      leverage: 0.07052611757877714
+      ext_studentized: -0.4274589766814879
+      cooks_d: 0.00736198016271967
+      flags: []
+    - name: lxylFeInd
+      rho0: 11819.489876397
+      delta_exp: 0.67
+      delta_fit: 0.6681146685126773
+      residual: 0.0018853314873227278
+      loo_pred: 0.6679585790582697
+      loo_error: 0.002041420941730321
+      leverage: 0.07646118015983412
+      ext_studentized: 0.02913401415393945
+      cooks_d: 3.7836663130988816e-05
+      flags: []
+    - name: Cp2Fe
+      rho0: 11819.812179237
+      delta_exp: 0.53
+      delta_fit: 0.5228681188358006
+      residual: 0.007131881164199383
+      loo_pred: 0.5219650835528756
+      loo_error: 0.008034916447124396
+      leverage: 0.11238888280517544
+      ext_studentized: 0.11246824572467906
+      cooks_d: 0.0008615743961690933
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 11819.124082931
+      delta_exp: 0.86
+      delta_fit: 0.8329603733489547
+      residual: 0.027039626651045312
+      loo_pred: 0.8311576843586574
+      loo_error: 0.028842315641342542
+      leverage: 0.06250153464494564
+      ext_studentized: 0.417477725802632
+      cooks_d: 0.0061738721506664805
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 11818.94144628
+      delta_exp: 0.99
+      delta_fit: 0.9152660191894361
+      residual: 0.07473398081056393
+      loo_pred: 0.9099676391515309
+      loo_error: 0.0800323608484691
+      leverage: 0.06620297067004455
+      ext_studentized: 1.2115714539217703
+      cooks_d: 0.05035185027286153
+      flags: []
+    - name: FeSPh4
+      rho0: 11819.431166498
+      delta_exp: 0.66
+      delta_fit: 0.6945724256382494
+      residual: -0.03457242563824936
+      loo_pred: 0.6972668115029526
+      loo_error: -0.037266811502952524
+      leverage: 0.07229987637899651
+      ext_studentized: -0.5389525629721534
+      cooks_d: 0.011923087422035688
+      flags: []
+    - name: FeSEt4
+      rho0: 11820.553723497
+      delta_exp: 0.25
+      delta_fit: 0.18868941536118833
+      residual: 0.06131058463881167
+      loo_pred: 0.16495296741522425
+      loo_error: 0.08504703258477575
+      leverage: 0.279097897064234
+      ext_studentized: 1.1231385499124484
+      cooks_d: 0.23970748450420779
+      flags: []
+    - name: FeCl4_2m
+      rho0: 11818.638960014
+      delta_exp: 1.05
+      delta_fit: 1.0515821821531455
+      residual: -0.0015821821531454283
+      loo_pred: 1.051734786543715
+      loo_error: -0.0017347865437149501
+      leverage: 0.08796724364868913
+      ext_studentized: -0.024602961096382363
+      cooks_d: 3.143545666695741e-05
+      flags: []
+    - name: FeBr4_2m
+      rho0: 11818.781945768
+      delta_exp: 1.12
+      delta_fit: 0.9871453083685664
+      residual: 0.1328546916314337
+      loo_pred: 0.9763345600207128
+      loo_error: 0.14366543997928727
+      leverage: 0.07524947091946578
+      ext_studentized: 2.494845706758656
+      cooks_d: 0.18442286537330038
+      flags: []
+    - name: FeCl4_m
+      rho0: 11820.158004777
+      delta_exp: 0.36
+      delta_fit: 0.36702100785457403
+      residual: -0.007021007854574046
+      loo_pred: 0.3685160437208119
+      loo_error: -0.008516043720811939
+      leverage: 0.17555521263755225
+      ext_studentized: -0.11488545027432956
+      cooks_d: 0.0015118064509594986
+      flags: []
+    - name: FeH2O6_2p
+      rho0: 11817.870876171
+      delta_exp: 1.39
+      delta_fit: 1.3977210125087234
+      residual: -0.007721012508723479
+      loo_pred: 1.4000382100903348
+      loo_error: -0.010038210090334898
+      leverage: 0.23083772512817263
+      ext_studentized: -0.13082084626647514
+      cooks_d: 0.00276201509356983
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 11819.606253267
+      delta_exp: 0.49
+      delta_fit: 0.6156691522715967
+      residual: -0.1256691522715967
+      loo_pred: 0.6276262162226331
+      loo_error: -0.13762621622263316
+      leverage: 0.08688071414892495
+      ext_studentized: -2.3232697315735424
+      cooks_d: 0.19540353766472285
+      flags: []
+    - name: FeCl6_3m
+      rho0: 11819.575843375
+      delta_exp: 0.56
+      delta_fit: 0.6293734432083891
+      residual: -0.06937344320838901
+      loo_pred: 0.6357252395797706
+      loo_error: -0.07572523957977051
+      leverage: 0.083879515028676
+      ext_studentized: -1.1277446640660937
+      cooks_d: 0.05711417698877643
+      flags: []
+    - name: FeF6_4m
+      rho0: 11817.562435599
+      delta_exp: 1.48
+      delta_fit: 1.5367204977856153
+      residual: -0.056720497785615276
+      loo_pred: 1.563854721950162
+      loo_error: -0.08385472195016197
+      leverage: 0.32358612053682784
+      ext_studentized: -1.0681368141645866
+      cooks_d: 0.270179026117617
+      flags: []
+    - name: FephenCl2
+      rho0: 11818.559959377
+      delta_exp: 1.05
+      delta_fit: 1.087184009137793
+      residual: -0.03718400913779285
+      loo_pred: 1.0911720257470872
+      loo_error: -0.041172025747087115
+      leverage: 0.09686228785030501
+      ext_studentized: -0.5887338399592665
+      cooks_d: 0.019496914816964903
+      flags: []
+    - name: FepyCl2
+      rho0: 11818.536948696
+      delta_exp: 1.16
+      delta_fit: 1.0975538278489343
+      residual: 0.062446172151065626
+      loo_pred: 1.0906382343305008
+      loo_error: 0.06936176566949914
+      leverage: 0.09970325079937899
+      ext_studentized: 1.0153370147358598
+      cooks_d: 0.056958205575268636
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: noFeO4
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: true
+- id: fit_fe1_calib18_tpssh_b6d846ba_all
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (17 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: TPSSh
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.3900028740229166
+  C: 11819.0
+  beta: 0.8885903674098568
+  n_training: 17
+  stats:
+    n: 17
+    dof: 15
+    resid_sd: 0.08510564330646286
+    r2: 0.9772999537475633
+    mae_fit: 0.06675860473880614
+    rmse_fit: 0.07994283172040295
+    max_abs_resid: 0.1621498508939634
+    loo_mae: 0.08911475502605554
+    loo_rmse: 0.1288933787257021
+    loo_max: 0.41591625630618256
+    se_alpha: 0.015346933450207965
+    se_beta: 0.020641150393452178
+    rho_min: 11817.562435599
+    rho_max: 11823.892451213
+    sxx: 30.7520093465474
+    xbar: 0.4081472555882262
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.1144770363914849
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 0.5537334981840175
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 2.6843907202085506
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 2.8184866110311892
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.247175616964271
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.3931281965812565
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.56963794935464
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.573172289726194
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.53557046897414
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.821351386303604e-05
+    deq_exp: null
+  - id: FeO4_2m
+    deq_calc: 1.4923367332867461e-05
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.6419773102556112
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.32141601383097784
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 1.836927262177407e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.749402650711279
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.5328783460135873
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.5365474236599836
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeO4_2m
+    flags:
+    - high_leverage_single_Fe(VI)_point
+    - delta_T_unverified
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.3900028740229166
+    beta: 0.8885903674098568
+    C: 11819.0
+    fingerprint:
+      functional: TPSSh
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeO4_2m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 11819.402350248
+    - 11819.489876397
+    - 11819.812179237
+    - 11819.124082931
+    - 11818.94144628
+    - 11819.431166498
+    - 11820.553723497
+    - 11818.638960014
+    - 11818.781945768
+    - 11820.158004777
+    - 11823.892451213
+    - 11817.870876171
+    - 11819.606253267
+    - 11819.575843375
+    - 11817.562435599
+    - 11818.559959377
+    - 11818.536948696
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - -0.9
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 17
+      dof: 15
+      resid_sd: 0.08510564330646286
+      r2: 0.9772999537475633
+      mae_fit: 0.06675860473880614
+      rmse_fit: 0.07994283172040295
+      max_abs_resid: 0.1621498508939634
+      loo_mae: 0.08911475502605554
+      loo_rmse: 0.1288933787257021
+      loo_max: 0.41591625630618256
+      se_alpha: 0.015346933450207965
+      se_beta: 0.020641150393452178
+      rho_min: 11817.562435599
+      rho_max: 11823.892451213
+      sxx: 30.7520093465474
+      xbar: 0.4081472555882262
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 11819.402350248
+      delta_exp: 0.68
+      delta_fit: 0.7316726143262211
+      residual: -0.051672614326221056
+      loo_pred: 0.7349022164676271
+      loo_error: -0.05490221646762705
+      leverage: 0.05882462219554365
+      ext_studentized: -0.612675773759696
+      cooks_d: 0.012240303568705752
+      flags: []
+    - name: lxylFeInd
+      rho0: 11819.489876397
+      delta_exp: 0.67
+      delta_fit: 0.6975371646640471
+      residual: -0.027537164664047098
+      loo_pred: 0.699264991403583
+      loo_error: -0.029264991403582963
+      leverage: 0.059040739691605476
+      ext_studentized: -0.32345252180963074
+      cooks_d: 0.0034906144185993106
+      flags: []
+    - name: Cp2Fe
+      rho0: 11819.812179237
+      delta_exp: 0.53
+      delta_fit: 0.5718381307580249
+      residual: -0.041838130758024894
+      loo_pred: 0.5747051555497604
+      loo_error: -0.0447051555497604
+      leverage: 0.06413186032972609
+      ext_studentized: -0.4952173384677933
+      cooks_d: 0.008847943594380715
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 11819.124082931
+      delta_exp: 0.86
+      delta_fit: 0.8401976677023244
+      residual: 0.019802332297675584
+      loo_pred: 0.8389011990101862
+      loo_error: 0.02109880098981376
+      leverage: 0.06144750560772414
+      ext_studentized: 0.23247901907007162
+      cooks_d: 0.0018883091432970644
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 11818.94144628
+      delta_exp: 0.99
+      delta_fit: 0.911426486494753
+      residual: 0.078573513505247
+      loo_pred: 0.9058826202057519
+      loo_error: 0.08411737979424805
+      leverage: 0.06590631213860615
+      ext_studentized: 0.9522918078861672
+      cooks_d: 0.03219228248305914
+      flags: []
+    - name: FeSPh4
+      rho0: 11819.431166498
+      delta_exp: 0.66
+      delta_fit: 0.7204341940076229
+      residual: -0.06043419400762284
+      loo_pred: 0.7242125067264413
+      loo_error: -0.0642125067264413
+      leverage: 0.058840760335286534
+      ext_studentized: -0.7201273625587981
+      cooks_d: 0.016748303069471185
+      flags: []
+    - name: FeSEt4
+      rho0: 11820.553723497
+      delta_exp: 0.25
+      delta_fit: 0.28263373814302284
+      residual: -0.03263373814302284
+      loo_pred: 0.2863201871862119
+      loo_error: -0.03632018718621188
+      leverage: 0.1014986245607542
+      ext_studentized: -0.3929610240382639
+      cooks_d: 0.00924292863564586
+      flags: []
+    - name: FeCl4_2m
+      rho0: 11818.638960014
+      delta_exp: 1.05
+      delta_fit: 1.029396999587375
+      residual: 0.020603000412624972
+      loo_pred: 1.0276524882220583
+      loo_error: 0.022347511777941698
+      leverage: 0.07806289052004335
+      ext_studentized: 0.2440967844157334
+      cooks_d: 0.0026912637681935562
+      flags: []
+    - name: FeBr4_2m
+      rho0: 11818.781945768
+      delta_exp: 1.12
+      delta_fit: 0.9736321445827998
+      residual: 0.14636785541720032
+      loo_pred: 0.9623482461360288
+      loo_error: 0.15765175386397134
+      leverage: 0.07157483611953272
+      ext_studentized: 1.943018834436603
+      cooks_d: 0.12280364630809355
+      flags: []
+    - name: FeCl4_m
+      rho0: 11820.158004777
+      delta_exp: 0.36
+      delta_fit: 0.43696517624746734
+      residual: -0.07696517624746735
+      loo_pred: 0.44339565401010256
+      loo_error: -0.08339565401010257
+      leverage: 0.07710806802782136
+      ext_studentized: -0.9375667233933701
+      cooks_d: 0.03702030105870227
+      flags: []
+    - name: FeO4_2m
+      rho0: 11823.892451213
+      delta_exp: -0.9
+      delta_fit: -1.019479666676943
+      residual: 0.11947966667694299
+      loo_pred: -1.3159162563061826
+      loo_error: 0.41591625630618256
+      leverage: 0.712731433635076
+      ext_studentized: 3.435328692742541
+      cooks_d: 8.51120380829529
+      flags:
+      - studentized_residual>2.5
+      - cooks_distance>1
+    - name: FeH2O6_2p
+      rho0: 11817.870876171
+      delta_exp: 1.39
+      delta_fit: 1.328951905847454
+      residual: 0.06104809415254597
+      loo_pred: 1.319369410058053
+      loo_error: 0.07063058994194682
+      leverage: 0.13567061803217373
+      ext_studentized: 0.7606524652624405
+      cooks_d: 0.0467223584998116
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 11819.606253267
+      delta_exp: 0.49
+      delta_fit: 0.6521498508939634
+      residual: -0.1621498508939634
+      loo_pred: 0.6625181463655242
+      loo_error: -0.1725181463655242
+      leverage: 0.06009973843327375
+      ext_studentized: -2.2033403892065264
+      cooks_d: 0.12347966280829337
+      flags: []
+    - name: FeCl6_3m
+      rho0: 11819.575843375
+      delta_exp: 0.56
+      delta_fit: 0.6640097961728983
+      residual: -0.1040097961728983
+      loo_pred: 0.6706178882287861
+      loo_error: -0.11061788822878604
+      leverage: 0.059738005865929845
+      ext_studentized: -1.2877054386403886
+      cooks_d: 0.050460870036832535
+      flags: []
+    - name: FeF6_4m
+      rho0: 11817.562435599
+      delta_exp: 1.48
+      delta_fit: 1.4492446153927685
+      residual: 0.030755384607231484
+      loo_pred: 1.4429630927395238
+      loo_error: 0.03703690726047615
+      leverage: 0.1696017059164159
+      ext_studentized: 0.3851471316919485
+      cooks_d: 0.0160602732840529
+      flags: []
+    - name: FephenCl2
+      rho0: 11818.559959377
+      delta_exp: 1.05
+      delta_fit: 1.0602074750665869
+      residual: -0.010207475066586813
+      loo_pred: 1.0611218933375692
+      loo_error: -0.011121893337569189
+      leverage: 0.08221786014561352
+      ext_studentized: -0.12101398972575726
+      cooks_d: 0.000702064328720628
+      flags: []
+    - name: FepyCl2
+      rho0: 11818.536948696
+      delta_exp: 1.16
+      delta_fit: 1.0691817067896183
+      residual: 0.0908182932103816
+      loo_pred: 1.060907003767242
+      loo_error: 0.09909299623275802
+      leverage: 0.08350441844487379
+      ext_studentized: 1.1244604629292159
+      cooks_d: 0.05660420078089928
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: all17
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: false
+- id: fit_fe1_calib18_mn15_7e4bc41c_noFeO4
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (16 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: MN15
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.4132664608078775
+  C: 12184.0
+  beta: 0.9742121621033119
+  n_training: 16
+  stats:
+    n: 16
+    dof: 14
+    resid_sd: 0.07865860624088085
+    r2: 0.955922262037421
+    mae_fit: 0.06148281402745306
+    rmse_fit: 0.07357838876863367
+    max_abs_resid: 0.1607942683714665
+    loo_mae: 0.07016785372318507
+    loo_rmse: 0.0836899218210854
+    loo_max: 0.17312334572500943
+    se_alpha: 0.02371725945557622
+    se_beta: 0.019664651560220212
+    rho_min: 12182.762682127
+    rho_max: 12185.981085106
+    sxx: 10.999260417872385
+    xbar: 0.34593216643770575
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  - id: FeO4_2m
+    reason: user-excluded
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.9686061413637161
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 2.961368158933363
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 3.771476534403614
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 3.921250678472143
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.6701735687090067
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.762695194768549
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.6059625598351537
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.587643197695199
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.603289006817414
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.9527784038786434e-05
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.617273077414411
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.38562337226229887
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 2.089308293130146e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.6530963143916386
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.7329307356835617
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.745712319265789
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.4132664608078775
+    beta: 0.9742121621033119
+    C: 12184.0
+    fingerprint:
+      functional: MN15
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 12184.445388513
+    - 12184.523464237
+    - 12184.852095812
+    - 12184.273239279
+    - 12184.102056411
+    - 12184.644045164
+    - 12185.981085106
+    - 12183.903419171
+    - 12184.036311755
+    - 12185.638576298
+    - 12183.088977846
+    - 12185.016005261
+    - 12184.9754952
+    - 12182.762682127
+    - 12183.643689244
+    - 12183.648383239
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 16
+      dof: 14
+      resid_sd: 0.07865860624088085
+      r2: 0.955922262037421
+      mae_fit: 0.06148281402745306
+      rmse_fit: 0.07357838876863367
+      max_abs_resid: 0.1607942683714665
+      loo_mae: 0.07016785372318507
+      loo_rmse: 0.0836899218210854
+      loo_max: 0.17312334572500943
+      se_alpha: 0.02371725945557622
+      se_beta: 0.019664651560220212
+      rho_min: 12182.762682127
+      rho_max: 12185.981085106
+      sxx: 10.999260417872385
+      xbar: 0.34593216643770575
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 12184.445388513
+      delta_exp: 0.68
+      delta_fit: 0.7901480276510788
+      residual: -0.11014802765107878
+      loo_pred: 0.7976040407640125
+      loo_error: -0.11760404076401243
+      leverage: 0.06339929363392124
+      ext_studentized: -1.5119443336856784
+      cooks_d: 0.07086085982411172
+      flags: []
+    - name: lxylFeInd
+      rho0: 12184.523464237
+      delta_exp: 0.67
+      delta_fit: 0.7578819495189731
+      residual: -0.0878819495189731
+      loo_pred: 0.7640281395061636
+      loo_error: -0.09402813950616351
+      leverage: 0.06536543230004781
+      ext_studentized: -1.1708770200924574
+      cooks_d: 0.046702629615294526
+      flags: []
+    - name: Cp2Fe
+      rho0: 12184.852095812
+      delta_exp: 0.53
+      delta_fit: 0.6220695416085689
+      residual: -0.09206954160856884
+      loo_pred: 0.6307096901813662
+      loo_error: -0.10070969018136622
+      leverage: 0.08579262389981455
+      ext_studentized: -1.248361207677034
+      cooks_d: 0.07031856202791847
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 12184.273239279
+      delta_exp: 0.86
+      delta_fit: 0.8612915323171468
+      residual: -0.0012915323171468485
+      loo_pred: 0.861378340798432
+      loo_error: -0.0013783407984320206
+      leverage: 0.06298041919940325
+      ext_studentized: -0.016345447638081503
+      cooks_d: 9.669327728169135e-06
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 12184.102056411
+      delta_exp: 0.99
+      delta_fit: 0.9320356703264323
+      residual: 0.05796432967356768
+      loo_pred: 0.927812704154453
+      loo_error: 0.06218729584554694
+      leverage: 0.06790721665190219
+      ext_studentized: 0.7513157278171663
+      cooks_d: 0.021222511888410317
+      flags: []
+    - name: FeSPh4
+      rho0: 12184.644045164
+      delta_exp: 0.66
+      delta_fit: 0.7080498965769415
+      residual: -0.048049896576941475
+      loo_pred: 0.7116987842434485
+      loo_error: -0.051698784243448426
+      leverage: 0.07057975772359053
+      ext_studentized: -0.6195355652600836
+      cooks_d: 0.015244680768921623
+      flags: []
+    - name: FeSEt4
+      rho0: 12185.981085106
+      delta_exp: 0.25
+      delta_fit: 0.1554961317878123
+      residual: 0.0945038682121877
+      loo_pred: 0.11390919550337653
+      loo_error: 0.13609080449662347
+      leverage: 0.3055822650050385
+      ext_studentized: 1.5055746230470213
+      cooks_d: 0.4573653075628281
+      flags: []
+    - name: FeCl4_2m
+      rho0: 12183.903419171
+      delta_exp: 1.05
+      delta_fit: 1.0141257794861283
+      residual: 0.03587422051387179
+      loo_pred: 1.01099344335125
+      loo_error: 0.03900655664875008
+      leverage: 0.08030281070655233
+      ext_studentized: 0.4620171034259946
+      cooks_d: 0.009873780886278992
+      flags: []
+    - name: FeBr4_2m
+      rho0: 12184.036311755
+      delta_exp: 1.12
+      delta_fit: 0.9592057316285336
+      residual: 0.1607942683714665
+      loo_pred: 0.9468766542749907
+      loo_error: 0.17312334572500943
+      leverage: 0.07121556773242484
+      ext_studentized: 2.4811788162651722
+      cooks_d: 0.1724899215181669
+      flags: []
+    - name: FeCl4_m
+      rho0: 12185.638576298
+      delta_exp: 0.36
+      delta_fit: 0.2970435346648591
+      residual: 0.06295646533514088
+      loo_pred: 0.2798606236579396
+      loo_error: 0.08013937634206036
+      leverage: 0.21441283662575958
+      ext_studentized: 0.896676549134305
+      cooks_d: 0.11128079248989783
+      flags: []
+    - name: FeH2O6_2p
+      rho0: 12183.088977846
+      delta_exp: 1.39
+      delta_fit: 1.3507070634042588
+      residual: 0.03929293659574107
+      loo_pred: 1.3405039447971816
+      loo_error: 0.0494960552028183
+      leverage: 0.20614003611539145
+      ext_studentized: 0.5464306007687281
+      cooks_d: 0.040811356781462894
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 12185.016005261
+      delta_exp: 0.49
+      delta_fit: 0.5543312637273159
+      residual: -0.0643312637273159
+      loo_pred: 0.5617438961871667
+      loo_error: -0.0717438961871667
+      leverage: 0.1033207402133906
+      ext_studentized: -0.8553715146000814
+      cooks_d: 0.04297688515838969
+      flags: []
+    - name: FeCl6_3m
+      rho0: 12184.9754952
+      delta_exp: 0.56
+      delta_fit: 0.5710727132641169
+      residual: -0.011072713264116851
+      loo_pred: 0.5722830098879016
+      loo_error: -0.012283009887901541
+      leverage: 0.09853420577119111
+      ext_studentized: -0.1429822274788768
+      cooks_d: 0.0012013626726068353
+      flags: []
+    - name: FeF6_4m
+      rho0: 12182.762682127
+      delta_exp: 1.48
+      delta_fit: 1.4855541403721393
+      residual: -0.0055541403721393046
+      loo_pred: 1.4878270916712513
+      loo_error: -0.007827091671251285
+      leverage: 0.2903953849755959
+      ext_studentized: -0.08079398993692043
+      cooks_d: 0.0014376993006992016
+      flags: []
+    - name: FephenCl2
+      rho0: 12183.643689244
+      delta_exp: 1.05
+      delta_fit: 1.12146344718334
+      residual: -0.07146344718333997
+      loo_pred: 1.1300562341777478
+      loo_error: -0.08005623417774776
+      leverage: 0.10733438916611067
+      ext_studentized: -0.9588234659723778
+      cooks_d: 0.05559128514635535
+      flags: []
+    - name: FepyCl2
+      rho0: 12183.648383239
+      delta_exp: 1.16
+      delta_fit: 1.1195235764823477
+      residual: 0.04047642351765224
+      loo_pred: 1.1146870021073374
+      loo_error: 0.04531299789266252
+      leverage: 0.10673702027986545
+      ext_studentized: 0.5302994087062545
+      cooks_d: 0.017710799932754626
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: noFeO4
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: true
+- id: fit_fe1_calib18_mn15_4e505a36_all
+  source: project_fit
+  verified: false
+  short: project fit on fe1_calib18 (17 compounds)
+  created_utc: '2026-10-17T03:44:37Z'
+  refset: fe1_calib18
+  geometry_label: MN15/def2-SVP
+  fingerprint:
+    functional: MN15
+    basis: def2-TZVP
+    fe_basis: CP(PPP)
+    grid: DefGrid3
+    special_grid_int_acc: '7'
+    special_grid_atoms: '26'
+    ri: NoRIJCOSX
+    solvent: water
+    program: ORCA 6.1.0
+  alpha: -0.3530999354813631
+  C: 12185.0
+  beta: 0.6081321327118221
+  n_training: 17
+  stats:
+    n: 17
+    dof: 15
+    resid_sd: 0.09768268269540537
+    r2: 0.9700949053737092
+    mae_fit: 0.07999567023304717
+    rmse_fit: 0.09175690308333873
+    max_abs_resid: 0.17158961015470553
+    loo_mae: 0.10532936098353927
+    loo_rmse: 0.14402939350909805
+    loo_max: 0.45085644391838364
+    se_alpha: 0.016007277992898517
+    se_beta: 0.023691530502755926
+    rho_min: 12182.762682127
+    rho_max: 12189.626076216
+    sxx: 37.239186238228264
+    xbar: -0.34347112476451214
+  excluded:
+  - id: lxylFeCO3
+    reason: output not found
+  deq_check:
+  - id: lxylFeC6H6
+    deq_calc: 1.9686061413637161
+    deq_exp: 0.69
+  - id: lxylFeInd
+    deq_calc: 2.961368158933363
+    deq_exp: 1.07
+  - id: Cp2Fe
+    deq_calc: 3.771476534403614
+    deq_exp: 2.41
+  - id: PNPiPrFeCl2
+    deq_calc: 3.921250678472143
+    deq_exp: 2.89
+  - id: PNPtBuFeCl2
+    deq_calc: 3.6701735687090067
+    deq_exp: 2.69
+  - id: FeSPh4
+    deq_calc: 3.762695194768549
+    deq_exp: 3.24
+  - id: FeSEt4
+    deq_calc: 0.6059625598351537
+    deq_exp: 0.62
+  - id: FeCl4_2m
+    deq_calc: 3.587643197695199
+    deq_exp: null
+  - id: FeBr4_2m
+    deq_calc: 3.603289006817414
+    deq_exp: null
+  - id: FeCl4_m
+    deq_calc: 1.9527784038786434e-05
+    deq_exp: null
+  - id: FeO4_2m
+    deq_calc: 1.973754691648818e-05
+    deq_exp: null
+  - id: FeH2O6_2p
+    deq_calc: 3.617273077414411
+    deq_exp: null
+  - id: FeCl5H2O_2m
+    deq_calc: 0.38562337226229887
+    deq_exp: 0.56
+  - id: FeCl6_3m
+    deq_calc: 2.089308293130146e-05
+    deq_exp: null
+  - id: FeF6_4m
+    deq_calc: 3.6530963143916386
+    deq_exp: null
+  - id: FephenCl2
+    deq_calc: 3.7329307356835617
+    deq_exp: null
+  - id: FepyCl2
+    deq_calc: 3.745712319265789
+    deq_exp: null
+  flagged:
+  - id: lxylFeC6H6
+    flags:
+    - rdkit_built_geometry
+  - id: lxylFeInd
+    flags:
+    - rdkit_built_geometry
+  - id: Cp2Fe
+    flags:
+    - b3lyp_outlier
+    - hand_built_geometry
+  - id: FeSEt4
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeBr4_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl4_m
+    flags:
+    - hand_built_geometry
+  - id: FeO4_2m
+    flags:
+    - high_leverage_single_Fe(VI)_point
+    - delta_T_unverified
+    - hand_built_geometry
+  - id: FeH2O6_2p
+    flags:
+    - hand_built_geometry
+  - id: FeCl5H2O_2m
+    flags:
+    - hand_built_geometry
+  - id: FeCl6_3m
+    flags:
+    - hand_built_geometry
+  - id: FeF6_4m
+    flags:
+    - hand_built_geometry
+  calibration:
+    model: delta = alpha*(rho0 - C) + beta
+    alpha: -0.3530999354813631
+    beta: 0.6081321327118221
+    C: 12185.0
+    fingerprint:
+      functional: MN15
+      basis: def2-TZVP
+      fe_basis: CP(PPP)
+      grid: DefGrid3
+      special_grid_int_acc: '7'
+      special_grid_atoms: '26'
+      ri: NoRIJCOSX
+      solvent: water
+      program: ORCA 6.1.0
+    names:
+    - lxylFeC6H6
+    - lxylFeInd
+    - Cp2Fe
+    - PNPiPrFeCl2
+    - PNPtBuFeCl2
+    - FeSPh4
+    - FeSEt4
+    - FeCl4_2m
+    - FeBr4_2m
+    - FeCl4_m
+    - FeO4_2m
+    - FeH2O6_2p
+    - FeCl5H2O_2m
+    - FeCl6_3m
+    - FeF6_4m
+    - FephenCl2
+    - FepyCl2
+    rho0:
+    - 12184.445388513
+    - 12184.523464237
+    - 12184.852095812
+    - 12184.273239279
+    - 12184.102056411
+    - 12184.644045164
+    - 12185.981085106
+    - 12183.903419171
+    - 12184.036311755
+    - 12185.638576298
+    - 12189.626076216
+    - 12183.088977846
+    - 12185.016005261
+    - 12184.9754952
+    - 12182.762682127
+    - 12183.643689244
+    - 12183.648383239
+    delta:
+    - 0.68
+    - 0.67
+    - 0.53
+    - 0.86
+    - 0.99
+    - 0.66
+    - 0.25
+    - 1.05
+    - 1.12
+    - 0.36
+    - -0.9
+    - 1.39
+    - 0.49
+    - 0.56
+    - 1.48
+    - 1.05
+    - 1.16
+    stats:
+      n: 17
+      dof: 15
+      resid_sd: 0.09768268269540537
+      r2: 0.9700949053737092
+      mae_fit: 0.07999567023304717
+      rmse_fit: 0.09175690308333873
+      max_abs_resid: 0.17158961015470553
+      loo_mae: 0.10532936098353927
+      loo_rmse: 0.14402939350909805
+      loo_max: 0.45085644391838364
+      se_alpha: 0.016007277992898517
+      se_beta: 0.023691530502755926
+      rho_min: 12182.762682127
+      rho_max: 12189.626076216
+      sxx: 37.239186238228264
+      xbar: -0.34347112476451214
+    per_point:
+    - name: lxylFeC6H6
+      rho0: 12184.445388513
+      delta_exp: 0.68
+      delta_fit: 0.8039654129885401
+      residual: -0.12396541298854002
+      loo_pred: 0.811880997815058
+      loo_error: -0.1318809978150579
+      leverage: 0.06002066224596514
+      ext_studentized: -1.343631470989163
+      cooks_d: 0.05470160629677654
+      flags: []
+    - name: lxylFeInd
+      rho0: 12184.523464237
+      delta_exp: 0.67
+      delta_fit: 0.77639687988181
+      residual: -0.10639687988181001
+      loo_pred: 0.7831038237065102
+      loo_error: -0.11310382370651018
+      leverage: 0.05929900161557617
+      ext_studentized: -1.1336383644471666
+      cooks_d: 0.03974996988662296
+      flags: []
+    - name: Cp2Fe
+      rho0: 12184.852095812
+      delta_exp: 0.53
+      delta_fit: 0.660357091951799
+      residual: -0.130357091951799
+      loo_pred: 0.6686557166352753
+      loo_error: -0.13865571663527532
+      leverage: 0.0598505772777158
+      ext_studentized: -1.4224981849093183
+      cooks_d: 0.06029464618768439
+      flags: []
+    - name: PNPiPrFeCl2
+      rho0: 12184.273239279
+      delta_exp: 0.86
+      delta_fit: 0.8647512964071924
+      residual: -0.004751296407192407
+      loo_pred: 0.865069501902986
+      loo_error: -0.005069501902986051
+      leverage: 0.06276859184256758
+      ext_studentized: -0.04854293864093336
+      cooks_d: 8.452940545519296e-05
+      flags: []
+    - name: PNPtBuFeCl2
+      rho0: 12184.102056411
+      delta_exp: 0.99
+      delta_fit: 0.9251959560534929
+      residual: 0.06480404394650707
+      loo_pred: 0.9205363823420126
+      loo_error: 0.06946361765798736
+      leverage: 0.06707934122323098
+      ext_studentized: 0.6742481165770223
+      cooks_d: 0.016960491427574383
+      flags: []
+    - name: FeSPh4
+      rho0: 12184.644045164
+      delta_exp: 0.66
+      delta_fit: 0.7338197623379906
+      residual: -0.07381976233799059
+      loo_pred: 0.7384338462385167
+      loo_error: -0.07843384623851668
+      leverage: 0.05882771433259607
+      ext_studentized: -0.7682556106274178
+      cooks_d: 0.01896373367521886
+      flags: []
+    - name: FeSEt4
+      rho0: 12185.981085106
+      delta_exp: 0.25
+      delta_fit: 0.2617110450817686
+      residual: -0.011711045081768623
+      loo_pred: 0.26309867281859634
+      loo_error: -0.013098672818596335
+      leverage: 0.10593651403047791
+      ext_studentized: -0.1225589799211445
+      cooks_d: 0.0009524344910233429
+      flags: []
+    - name: FeCl4_2m
+      rho0: 12183.903419171
+      delta_exp: 1.05
+      delta_fit: 0.9953347526819034
+      residual: 0.05466524731809663
+      loo_pred: 0.9909628061523674
+      loo_error: 0.05903719384763262
+      leverage: 0.07405410461783014
+      ext_studentized: 0.5682921170848545
+      cooks_d: 0.013524941519513368
+      flags: []
+    - name: FeBr4_2m
+      rho0: 12184.036311755
+      delta_exp: 1.12
+      delta_fit: 0.9484103898452946
+      residual: 0.17158961015470553
+      loo_pred: 0.9356628847363637
+      loo_error: 0.1843371152636364
+      leverage: 0.06915322012443927
+      ext_studentized: 1.9928832306329172
+      cooks_d: 0.12313253745153196
+      flags: []
+    - name: FeCl4_m
+      rho0: 12185.638576298
+      delta_exp: 0.36
+      delta_fit: 0.3826508830878221
+      residual: -0.022650883087822093
+      loo_pred: 0.3847475294345637
+      loo_error: -0.02474752943456371
+      leverage: 0.08472144067089697
+      ext_studentized: -0.23461804740283904
+      cooks_d: 0.0027188915122795076
+      flags: []
+    - name: FeO4_2m
+      rho0: 12189.626076216
+      delta_exp: -0.9
+      delta_fit: -1.0253350806896466
+      residual: 0.1253350806896466
+      loo_pred: -1.3508564439183837
+      loo_error: 0.45085644391838364
+      leverage: 0.7220066777789358
+      ext_studentized: 3.022102681937955
+      cooks_d: 7.690465436165668
+      flags:
+      - studentized_residual>2.5
+      - cooks_distance>1
+    - name: FeH2O6_2p
+      rho0: 12183.088977846
+      delta_exp: 1.39
+      delta_fit: 1.282913931992505
+      residual: 0.10708606800749498
+      loo_pred: 1.2676427400131751
+      loo_error: 0.12235725998682478
+      leverage: 0.12480822127737867
+      ext_studentized: 1.1877650503774755
+      cooks_d: 0.09791236204228623
+      flags: []
+    - name: FeCl5H2O_2m
+      rho0: 12185.016005261
+      delta_exp: 0.49
+      delta_fit: 0.6024806760850674
+      residual: -0.1124806760850674
+      loo_pred: 0.609952981267552
+      loo_error: -0.11995298126755205
+      leverage: 0.06229361791198698
+      ext_studentized: -1.2071058244730322
+      cooks_d: 0.0469678299464693
+      flags: []
+    - name: FeCl6_3m
+      rho0: 12184.9754952
+      delta_exp: 0.56
+      delta_fit: 0.6167847760107014
+      residual: -0.05678477601070131
+      loo_pred: 0.6205094719366965
+      loo_error: -0.060509471936696424
+      leverage: 0.06155558471724631
+      ext_studentized: -0.5868201087424162
+      cooks_d: 0.011809976530396664
+      flags: []
+    - name: FeF6_4m
+      rho0: 12182.762682127
+      delta_exp: 1.48
+      delta_fit: 1.39812892931924
+      residual: 0.08187107068075994
+      loo_pred: 1.3830953854734584
+      loo_error: 0.09690461452654153
+      leverage: 0.15513754344138003
+      ext_studentized: 0.9064029425940591
+      cooks_d: 0.07633798190966622
+      flags: []
+    - name: FephenCl2
+      rho0: 12183.643689244
+      delta_exp: 1.05
+      delta_fit: 1.087045373148211
+      residual: -0.03704537314821099
+      loo_pred: 1.090547499878447
+      loo_error: -0.04054749987844697
+      leverage: 0.08637096592230746
+      ext_studentized: -0.3853370636365806
+      cooks_d: 0.007440991126344521
+      flags: []
+    - name: FepyCl2
+      rho0: 12183.648383239
+      delta_exp: 1.16
+      delta_fit: 1.0853879238163113
+      residual: 0.07461207618368859
+      loo_pred: 1.0783571501150404
+      loo_error: 0.08164284988495951
+      leverage: 0.0861162209694687
+      ext_studentized: 0.7888758299059218
+      cooks_d: 0.030078496469959946
+      flags: []
+    metadata:
+      refset: fe1_calib18
+      plan_hash: 5040d3e14ff5e5aa132f8efa5e196a7a469b420d840ea89fa70fed51a46c8e87
+      geometry: MN15/def2-SVP
+      created_utc: '2026-10-17T03:44:37Z'
+    n_boot: 5000
+    seed: 0
+  note: Fitted on this project's own calculations; valid only for this exact protocol
+    (fingerprint + geometry level).
+  variant: all17
+  solvent_note: CPCM(water) for SP and geometry optimization; lxylFeCO3 pending at
+    fit time
+  recommended: false
