@@ -1,21 +1,29 @@
 """Look and feel shared by the Streamlit app and `mossbauer gui` (which passes THEME as --theme.* flags)."""
 from __future__ import annotations
 
+ST_THOMAS_PURPLE = "#510C76"
+COOL_GRAY_TINT = "#F5F5F7"
+COOL_GRAY_DARK = "#63666A"
+COOL_GRAY = "#97999B"
+IRON = "#C2571A"
+EMERALD = "#1F7A5C"
+LAVENDER = "#A88BC7"
+
 THEME = {
     "base": "light",
-    "primaryColor": "#510C76",            # St. Thomas purple
+    "primaryColor": ST_THOMAS_PURPLE,
     "backgroundColor": "#FFFFFF",
-    "secondaryBackgroundColor": "#F5F5F7",  # cool-gray tint
+    "secondaryBackgroundColor": COOL_GRAY_TINT,
     "textColor": "#1D1D22",
     "font": "sans serif",
 }
 
 TEXT_COLOR = THEME["textColor"]
-MUTED_COLOR = "#63666A"                   # cool gray: secondary text
-FE_COLOR = "#C2571A"                      # iron highlight in the 3D view and plots
-PLOT_COLORS = ["#510C76", "#C2571A", "#1F7A5C", "#97999B", "#A88BC7"]  # purple, iron, emerald, cool gray, lavender
+MUTED_COLOR = COOL_GRAY_DARK
+FE_COLOR = IRON
+PLOT_COLORS = [ST_THOMAS_PURPLE, IRON, EMERALD, COOL_GRAY, LAVENDER]
 GRID_COLOR = "#ECECEF"
-REF_LINE_COLOR = "#97999B"                # y = x guide
+REF_LINE_COLOR = COOL_GRAY
 
 
 def theme_flags() -> list[str]:

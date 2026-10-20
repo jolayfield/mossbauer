@@ -5,8 +5,7 @@ import json
 import pandas as pd
 import streamlit as st
 
-from mossbauer_dft import project as J
-from mossbauer_dft.gui.state import _invalidate, ss
+from mossbauer_dft.gui.state import _invalidate, _scan, ss
 from mossbauer_dft.gui.widgets import _need_entry
 
 
@@ -39,8 +38,7 @@ def page_states():
     with st.expander('Link existing entries into a family'):
         with st.form('link_existing_states'):
             existing_name = st.text_input('Existing-state family name')
-            entries = J.list_entries(root)
-            members = st.multiselect('Family members', [e.entry_id for e in entries])
+            members = st.multiselect('Family members', [e.entry_id for e in _scan()])
             link = st.form_submit_button('Create family from selected entries')
         if link:
             try:

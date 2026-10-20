@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-import re
 import selectors
 import shlex
 import subprocess
@@ -11,8 +10,8 @@ import tempfile
 import time
 
 from . import compact, harvest, plan as P, project as J
+from .site import SSH_HOST
 
-_HOST = re.compile(r"(?:[A-Za-z0-9_][A-Za-z0-9_.-]*@)?[A-Za-z0-9_][A-Za-z0-9_.-]*\Z")
 TIMEOUT = 30
 STDERR_LIMIT = 16_384
 
@@ -23,12 +22,11 @@ class RemoteError(J.ProjectError):
 
 def ssh_command(host: str, remote_path: str) -> list[str]:
     """Build fixed SSH arguments and a quoted, read-only remote command. No local shell."""
-    if not isinstance(host, str) or len(host) > 253 or not _HOST.fullmatch(host):
+    if not isinstance(host, str) or len(host) > 253 or not SSH_HOST.fullmatch(host):
         raise RemoteError('Use an SSH host alias or user@hostname (configure ports and identities in ~/.ssh/config).')
     if (not isinstance(remote_path, str) or not remote_path.startswith('/') or remote_path.endswith('/')
             or len(remote_path) > 4096 or any(ord(c) < 32 or ord(c) == 127 for c in remote_path)):
         raise RemoteError('Give the absolute remote bundle filename, without control characters.')
-    # head bounds the remote response; the reader independently caps both local streams.
     remote = f'head -c {harvest.MAX_BYTES + 1} < {shlex.quote(remote_path)}'
     return ['ssh', '-T', '-n', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes',
             '-o', 'PermitLocalCommand=no', '-o', 'ForwardAgent=no', '-o', 'ClearAllForwardings=yes', '-o', 'ConnectTimeout=10',

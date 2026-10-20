@@ -91,14 +91,14 @@ def test_upload_helper_is_optional_local_and_lf(proj, fe1, monkeypatch):
     monkeypatch.setattr('subprocess.run', lambda *a, **k: pytest.fail('generation contacted transport'))
     p = SiteProfile(name='transfer', partition='compute', sif='/images/orca.sif',
                     ssh_host='cluster-alias', remote_dir="/home/user/space 'quote/runs")
-    content = H.export_inputs(proj, ref.entry_id, 1, upload=p)
+    content = H.export_inputs(proj, ref.entry_id, 1, upload=True, transfer_site=p)
     with zipfile.ZipFile(io.BytesIO(content)) as z:
         script = z.read('upload.sh')
         assert b'\r' not in script and b'StrictHostKeyChecking=yes' in script
         assert b'sbatch' not in script and b'ForwardAgent=no' in script
         assert b'harvest.pyz' in script
     with pytest.raises(ValueError, match='SSH|ssh_host'):
-        H.export_inputs(proj, ref.entry_id, 1, upload=SiteProfile.load('example'))
+        H.export_inputs(proj, ref.entry_id, 1, upload=True, transfer_site=SiteProfile.load('example'))
 
 
 def test_upload_helper_fake_transport_and_existing_destination(proj, fe1, tmp_path, monkeypatch):
@@ -113,7 +113,7 @@ def test_upload_helper_fake_transport_and_existing_destination(proj, fe1, tmp_pa
                     ssh_host='cluster-alias', remote_dir=str(remote))
     local = tmp_path / "local space 'quote"
     local.mkdir()
-    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, agent=True, upload=p))) as z:
+    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, agent=True, upload=True, transfer_site=p))) as z:
         z.extractall(local)
     (local / 'private.out').write_text('private')
     fakebin = tmp_path / 'bin'
@@ -153,7 +153,7 @@ def test_upload_checks_bytes_before_transport(proj, fe1, tmp_path, monkeypatch):
     p = SiteProfile(name='transfer', partition='compute', sif='/images/orca.sif', ssh_host='cluster', remote_dir='/runs')
     local = tmp_path / 'delivery'
     local.mkdir()
-    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, upload=p))) as z:
+    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, upload=True, transfer_site=p))) as z:
         z.extractall(local)
     import os
     fakebin = tmp_path / 'bin'
@@ -181,7 +181,7 @@ def test_upload_missing_tools_and_failed_transport(proj, fe1, tmp_path, monkeypa
     p = SiteProfile(name='transfer', partition='compute', sif='/images/orca.sif', ssh_host='cluster', remote_dir=str(remote))
     local = tmp_path / 'delivery'
     local.mkdir()
-    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, upload=p))) as z:
+    with zipfile.ZipFile(io.BytesIO(H.export_inputs(proj, ref.entry_id, 1, upload=True, transfer_site=p))) as z:
         z.extractall(local)
     fakebin = tmp_path / 'bin'
     fakebin.mkdir()

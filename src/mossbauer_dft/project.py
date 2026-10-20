@@ -14,7 +14,6 @@ non-GUI modules are used here, so the CLI works without the ``gui`` extra.
 """
 from __future__ import annotations
 import copy
-import hashlib
 import json
 import math
 import os
@@ -27,6 +26,7 @@ from pathlib import Path
 import yaml
 
 from . import data as _data
+from .fileio import sha256_file, write_atomic as _write_atomic
 from . import plan as P
 from . import workflow as W
 from .orca_parse import parse_orca_text
@@ -132,14 +132,6 @@ class EntryInfo:
 
 
 # ----------------------------------------------------------------------------- small helpers
-def _write_atomic(path: Path, text: str):
-    path = Path(path)
-    tmp = path.with_name(f".{path.name}.{uuid.uuid4().hex[:8]}.tmp")
-    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text)
-    os.replace(tmp, path)
-
-
 def _dump(d: dict) -> str:
     return yaml.safe_dump(d, sort_keys=False, allow_unicode=True)
 
@@ -421,10 +413,9 @@ def write_manifest(inputs_dir, plan: dict) -> Path:
     if harvest_manifest is not None:
         _write_atomic(inputs_dir / 'harvest-manifest.json', json.dumps(harvest_manifest, indent=2))
     from .handoff import FIXED_FILES
-    import hashlib
     allowed = FIXED_FILES | {j['stem'] + '.inp' for j in plan['jobs']}
     files = sorted(name for name in allowed if (inputs_dir / name).is_file() and not (inputs_dir / name).is_symlink())
-    hashes = {name: hashlib.sha256((inputs_dir / name).read_bytes()).hexdigest() for name in files}
+    hashes = {name: sha256_file(inputs_dir / name) for name in files}
     man = dict(schema_version=SCHEMA, plan_hash=plan["plan_hash"], expected_stems=[j["stem"] for j in plan["jobs"]],
                files=files, sha256=hashes)
     path = inputs_dir / MANIFEST
@@ -456,7 +447,7 @@ class JobStatus:
     file: str | None = None      # version-relative path of the output that was classified
     reason: str = ""
     hint: str | None = None
-    run: dict | None = None      # the job's own state record (started/finished), when one came back (D55)
+    run: dict | None = None
 
     @property
     def run_label(self) -> str:
@@ -545,19 +536,17 @@ def _run_state(vd: Path, stem: str) -> dict | None:
     for f, kind in ((vd / "outputs" / f"{stem}.state.json", "json"), (vd / "outputs" / f"{stem}.state", "text"),
                     (vd / "inputs" / f"{stem}.state", "text")):
         try:
-            if not f.is_file():
-                continue
-            if kind == "json":
-                rec = harvest.check_state(json.loads(f.read_text()))
-            else:
-                with open(f, errors="replace") as fh:
-                    rec = harvest.parse_state(fh.read(harvest.STATE_MAX))
+            rec = harvest.check_state(json.loads(f.read_text())) if kind == "json" else harvest.read_state(f)
         except (OSError, ValueError):
             continue
         if rec:
             found.append(rec)
-    # several copies (an adopted old run, a resubmitted new one): the run that started last wins (ISO times sort)
-    return max(found, key=lambda r: (r.get("started") or {}).get("at", "")) if found else None
+    return _newest_run(found)
+
+
+def _newest_run(records: list[dict]) -> dict | None:
+    """Of several copies (an adopted old run, a resubmitted new one), the run that started last."""
+    return max(records, key=lambda r: (r.get("started") or {}).get("at", "")) if records else None
 
 
 def _describe_run(run: dict) -> str:
@@ -655,14 +644,14 @@ def adopt_outputs(root, entry_id: str, version: int | None = None) -> dict:
             src, dst = vd / "inputs" / name, vd / "outputs" / name
             if not src.is_file():
                 continue
-            digest = hashlib.sha256(src.read_bytes()).hexdigest()
+            digest = sha256_file(src)
             if dst.exists():
-                if hashlib.sha256(dst.read_bytes()).hexdigest() != digest:
+                if sha256_file(dst) != digest:
                     skipped.append(dict(file=name, reason="outputs/ already has a different file (an earlier run?); not "
                                                     "overwritten: move that file aside, then adopt again"))
                 continue
             shutil.copy2(src, dst)
-            if hashlib.sha256(dst.read_bytes()).hexdigest() != digest:
+            if sha256_file(dst) != digest:
                 dst.unlink(missing_ok=True)
                 raise ProjectError(f"copy of {name} did not verify; nothing kept")
             adopted.append(name)
@@ -785,11 +774,7 @@ def scan_project(root) -> list[EntryStatus]:
 
 # ----------------------------------------------------------------------------- saved analysis
 def _file_record(path: Path) -> dict:
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
-    return dict(name=path.name, size=path.stat().st_size, sha256=h.hexdigest())
+    return dict(name=path.name, size=path.stat().st_size, sha256=sha256_file(path))
 
 
 def _used_outputs(vd: Path, jobs: list[JobStatus]) -> list[dict]:

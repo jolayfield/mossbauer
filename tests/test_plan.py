@@ -223,6 +223,14 @@ def test_rule_fe_basis_must_be_explicit(fe1):
         P.recommend_methods(rule, P.SystemInfo(fe1, -1, 4, 1), {})
 
 
+def test_basis_fe_text_never_selects_the_fe_basis(fe1):
+    system = P.SystemInfo(fe1, -1, 4, 1)
+    rule = next(r for r in P._data.load_method_rules()["rules"] if (r.get("delta") or {}).get("fe_basis") == "def2-TZVP")
+    rule = copy.deepcopy(rule)
+    rule["delta"]["basis_fe"] = "CP(PPP) on Fe"
+    assert P.recommend_methods(rule, system, {})["delta"]["fe_basis"] is None
+
+
 def test_plan_engine_never_recommends_mn15_for_deq(fe1):
     plan = P.make_plan(fe1, -1, 4, oxidation_state=1)
     assert plan["methods"]["deq"]["functional"] in ("B3LYP", "TPSSh") and "MN15" in plan["methods"]["deq"]["forbidden"]

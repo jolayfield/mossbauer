@@ -405,7 +405,7 @@ def cmd_project(a):
         print(f"\nput finished outputs in: {_rel(root, vd / 'outputs')}/<stem>.out")
     elif act == 'export-inputs':
         from .handoff import export_inputs
-        content = export_inputs(root, a.entry, a.version, agent=a.agent, upload=(a.transfer_site or True) if a.upload else False)
+        content = export_inputs(root, a.entry, a.version, agent=a.agent, upload=a.upload, transfer_site=a.transfer_site or None)
         with Path(a.out).open('xb') as stream:
             stream.write(content)
         print(f'Exported approved inputs to {a.out}; upload and submission are external.')

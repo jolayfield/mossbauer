@@ -1,5 +1,6 @@
 """Session state shared by every page: the open project, the cached scan, the current entry version, navigation."""
 from __future__ import annotations
+import copy
 import os
 import sys
 from dataclasses import dataclass
@@ -11,7 +12,7 @@ import streamlit as st
 from mossbauer_dft import project as J
 
 PAGES = ["Project", "New prediction", "Batch intake", "Plan review", "Inputs", "Results", "Study", "Calibration", "States", "References", "Cluster setup"]
-from mossbauer_dft.tutorial import PAGE_LABELS as STEPS  # noqa: E402,F401 -- one label list for the sidebar and the guide
+from mossbauer_dft.tutorial import PAGE_LABELS as STEPS  # noqa: E402,F401
 ss = st.session_state
 
 
@@ -78,6 +79,11 @@ def _evaluate(path: str, entry: str | None = None, version: int | None = None):
     ss._target = dict(path=str(p), kind=kind, msg=msg)
 
 
+def _fail(path: str, msg: str):
+    """Show ``msg`` as the Project page's error for ``path``."""
+    ss._target = dict(path=path, kind="error", msg=msg)
+
+
 def _invalidate():
     ss._scan = None
 
@@ -115,10 +121,27 @@ def _current() -> Current | None:
     plan = None
     if vs.status is not None:
         try:
-            plan = J.load_version(root, eid, vs.version)
-        except Exception:  # noqa: BLE001 -- shown as unreadable
+            plan = _load_plan(root, eid, vs.version)
+        except Exception:  # noqa: BLE001
             plan = None
     return Current(root, e, vs, plan)
+
+
+def _stamp(path: Path):
+    try:
+        return path.stat().st_mtime_ns
+    except OSError:
+        return None
+
+
+def _load_plan(root: Path, eid: str, version: int) -> dict:
+    """``J.load_version``, parsed again only when plan.yaml or structure.xyz changed since the last call."""
+    vd = J.version_dir(root, eid, version)
+    key = (str(vd), _stamp(vd / "plan.yaml"), _stamp(vd / "structure.xyz"))
+    c = ss.get("_plan_cache")
+    if not c or c[0] != key:
+        c = ss._plan_cache = (key, J.load_version(root, eid, version))
+    return copy.deepcopy(c[1])
 
 
 def _goto(page: str):
@@ -129,7 +152,14 @@ def _guide_now():
     """The guide for the open project, from the cached scan (None without a project)."""
     from mossbauer_dft import tutorial as T
     root = _root()
-    return T.guide(root, _scan()) if root is not None else None
+    if root is None:
+        return None
+    rows = _scan()
+    key = (str(root), ss._scan["at"], _stamp(root / "project.yaml"), (root / "recorded" / "pack.json").is_file())
+    c = ss.get("_guide_cache")
+    if not c or c[0] != key:
+        c = ss._guide_cache = (key, T.guide(root, rows))
+    return c[1]
 
 
 def _waiting(page: str) -> list[tuple[str, str]]:

@@ -39,6 +39,11 @@ def parse_state(text):
     return out
 
 
+def read_state(path):
+    with open(path, errors='replace') as fh:
+        return parse_state(fh.read(STATE_MAX))
+
+
 def check_state(state):
     if not isinstance(state, dict) or not set(state) <= set(STATE_KEYS):
         raise ValueError('invalid job-state record')
@@ -164,7 +169,7 @@ def harvest(manifest_path, outputs):
         if not SAFE.fullmatch(stem): raise ValueError('unsafe expected job stem')
         state_file = Path(outputs) / f'{stem}.state'
         if state_file.is_file():
-            with open(state_file, errors='replace') as fh: state = parse_state(fh.read(STATE_MAX))
+            state = read_state(state_file)
             if state: doc['census'][stem] = state
         source = Path(outputs) / f'{stem}.out'
         if not source.is_file():
@@ -173,12 +178,11 @@ def harvest(manifest_path, outputs):
         text = raw.decode(errors='replace')
         match = STAMP.search(text)
         try:
-            # one unparseable output is a rejected job, not a failed harvest
             parsed = json.loads(json.dumps(asdict(parse_orca_text(text, source.name)), allow_nan=False))
             parsed['path'] = source.name
             record = dict(source=dict(name=source.name, size=len(raw), sha256=hashlib.sha256(raw).hexdigest()), parsed=parsed,
                           stamp=dict(entry=match[1], version=int(match[2]), plan=match[3]) if match else None)
-            validate(dict(doc, records={stem: record}), manifest)
+            validate(dict(doc, records={stem: record}, missing=[], rejected=[], census={}), manifest)
         except Exception as ex:  # noqa: BLE001
             doc['rejected'].append(dict(job=stem, reason=str(ex))); continue
         doc['records'][stem] = record

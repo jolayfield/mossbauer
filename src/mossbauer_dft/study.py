@@ -117,7 +117,7 @@ def _collect(root, entry, version, newest) -> list[dict]:
         row = dict(original, trust_flags=tflags)
         status = (saved.get('delta_status') or {}).get('status', 'unknown')
         reasons = list((saved.get('delta_status') or {}).get('reasons') or ['analysis saved before calibration status was recorded'])
-        if status in CALIBRATED_STATUSES and delta_blocked:  # this output itself did not get a usable calibrated prediction
+        if status in CALIBRATED_STATUSES and delta_blocked:
             blocking = '; '.join(f['text'] for f in tflags if f['severity'] == trust.BLOCKING and f['property'] in ('delta', 'all'))
             status, reasons = 'exploratory', reasons + [f'this output: {blocking}']
         row.update(entry=entry, compound=name, version=version, newest_version=newest, older_version=version != newest,
@@ -157,7 +157,7 @@ def _summaries(rows) -> list[dict]:
                 # The entire protocol, constants and uncertainty model identify a cohort.
                 cohort = dict(protocol=row['protocol'], calibration=row['calibration_snapshot'],
                               calibration_id=row['calibration'] if prop == 'delta' else None, property=prop)
-                if prop == 'delta':  # abs_deq cohorts (and their ids) are unchanged: no calibration is involved
+                if prop == 'delta':
                     cohort['delta_status'] = row['delta_status']
                 key = json.dumps(cohort, sort_keys=True)
                 groups[key].append(row)

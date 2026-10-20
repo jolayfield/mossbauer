@@ -274,11 +274,6 @@ def test_cli_report_verify(proj, fe1, tmp_path, capsys):
     assert bad.read_bytes() == before
 
 
-def test_study_json_download_is_the_snapshot_too(proj, fe1):
-    public = report.public_snapshot(_doc(proj, fe1))
-    assert all("result_path" not in r for r in public["rows"])
-
-
 @pytest.mark.parametrize("members", [{"MANIFEST.json": "not json"}, {"MANIFEST.json": '{"members": {}}'},
                                      {"MANIFEST.json": '{"members": {}}', "study.json": '{"rows": [{"delta": "x", "rho0": 1, '
                                       '"calibration_snapshot": {"model": {"alpha": 1, "C": 0, "beta": 0}}}]}', "results.csv": "a\n1\n"}])

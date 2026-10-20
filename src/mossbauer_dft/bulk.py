@@ -65,7 +65,7 @@ def run(root, verb: str, entries, *, site: str | None = None, calibration=None, 
                 r = J.analyze_version(root, entry, vs.version, calibration, level)
                 out.append(outcome(entry, vs.version, "done",
                                    f"{len(r['rows'])} rows; delta status {r['delta_status']['status']}"))
-        except Exception as ex:  # noqa: BLE001 -- one entry's failure is reported, the others still run
+        except Exception as ex:  # noqa: BLE001
             out.append(outcome(entry, vs.version, "failed", f"{type(ex).__name__}: {ex}"))
     return out
 

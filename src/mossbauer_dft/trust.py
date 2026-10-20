@@ -8,8 +8,6 @@ from __future__ import annotations
 
 CAUTION, BLOCKING = "caution", "blocking"
 
-# Spin contamination: |<S^2> - S(S+1)| above 10% of the ideal value (and at least 0.1). Broken-symmetry solutions are
-# spin-contaminated by construction and are not flagged.
 SPIN_CONTAMINATION_REL = 0.10
 SPIN_CONTAMINATION_MIN = 0.10
 
@@ -17,8 +15,6 @@ SPIN_CONTAMINATION_MIN = 0.10
 # worst performers in Bochevarov 2010.
 FE1_DEQ_AVOID = {"MN15", "M062X", "M06-2X", "BHANDHLYP", "SVWN5", "SVWN"}
 
-# (substring, code, severity) checked in order against a calibration or analysis message. Unknown text is blocking, which
-# keeps the behavior of the old free-text note (any note demoted the row) for anything not explicitly classified.
 _RULES = [
     ("calibration refused", "calibration_refused", BLOCKING),
     ("IMPLAUSIBLE", "implausible", BLOCKING),
@@ -90,7 +86,9 @@ def rule_flags(functional, oxidation_state) -> list[dict]:
     return []
 
 
-def label(flags) -> str:
-    """Short table text, blocking first: '⛔ calibration refused · ⚠ extrapolated'."""
+def label(flags, *, plain: bool = False) -> str:
+    """Short table text, blocking first: '⛔ calibration refused · ⚠ extrapolated', or with ``plain`` (for files that
+    leave the app) 'blocking: calibration refused · caution: extrapolated'."""
+    block, caution = ("blocking: ", "caution: ") if plain else ("⛔ ", "⚠ ")
     order = sorted(flags, key=lambda f: f.get("severity") != BLOCKING)
-    return " · ".join(("⛔ " if f.get("severity") == BLOCKING else "⚠ ") + str(f.get("code", "")).replace("_", " ") for f in order)
+    return " · ".join((block if f.get("severity") == BLOCKING else caution) + str(f.get("code", "")).replace("_", " ") for f in order)
