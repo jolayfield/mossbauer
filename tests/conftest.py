@@ -1,7 +1,22 @@
+import os
 from pathlib import Path
 import pytest
 
 DATA = Path(__file__).parent / "data"
+PRIVATE_TESTS = "MOSSBAUER_PRIVATE_TESTS"
+
+
+def pytest_configure(config):
+    """Opt-in extra tests kept outside the repository (for example, checks against unpublished calculations):
+    when MOSSBAUER_PRIVATE_TESTS names a folder of tests, a plain ``pytest`` run collects it as well as tests/."""
+    folder = os.environ.get(PRIVATE_TESTS)
+    if not folder:
+        return
+    path = Path(folder).expanduser().resolve()
+    if not path.is_dir():
+        raise pytest.UsageError(f"{PRIVATE_TESTS}={folder} is not a folder")
+    if config.args_source == pytest.Config.ArgsSource.TESTPATHS:
+        config.args.append(str(path))
 
 
 @pytest.fixture(scope="session")

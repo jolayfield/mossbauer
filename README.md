@@ -19,7 +19,7 @@ Review and approve a scientific plan, generate its inputs, then run the calculat
 
 ## Install for users
 
-Download the wheel from [public releases](https://github.com/jolayfield/mossbauer/releases). This repository holds the source, published as snapshots of the author's development repository; installing the app needs only the release wheel. Follow the [Windows and macOS installation guide](docs/releases/INSTALL.md) for uv setup and the pip fallback.
+Download the wheel from [public releases](https://github.com/jolayfield/mossbauer/releases). Development happens in this repository; installing the app needs only the release wheel. Follow the [Windows and macOS installation guide](docs/releases/INSTALL.md) for uv setup and the pip fallback.
 
 With [uv](https://docs.astral.sh/uv/getting-started/installation/) installed, run from the download directory on either platform:
 
