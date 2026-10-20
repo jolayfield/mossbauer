@@ -170,7 +170,7 @@ def si_rows(public):
                         delta_pi=f'{_fmt(lo)} to {_fmt(hi)}' if lo is not None and hi is not None else '',
                         delta_exp=_fmt(r.get('delta_exp')), abs_deq=_fmt(r.get('abs_deq')), abs_deq_exp=_fmt(r.get('abs_deq_exp')),
                         eta=_fmt(r.get('eta')), delta_status=r.get('delta_status') or '',
-                        alerts=trust.label(r.get('trust_flags') or []).replace('⛔ ', 'blocking: ').replace('⚠ ', 'caution: ')))
+                        alerts=trust.label(r.get('trust_flags') or [], plain=True)))
     return out
 
 
@@ -187,7 +187,7 @@ _TEX = {'\\': r'\textbackslash{}', '&': r'\&', '%': r'\%', '$': r'\$', '#': r'\#
         '~': r'\textasciitilde{}', '^': r'\textasciicircum{}', 'δ': r'$\delta$', 'Δ': r'$\Delta$', 'η': r'$\eta$',
         'ρ': r'$\rho$', '|': r'$|$', '⛔': '', '⚠': '', '−': '-', '–': '--', '—': '---', '·': r'$\cdot$',
         '°': r'$^\circ$', '±': r'$\pm$', 'α': r'$\alpha$', 'β': r'$\beta$', 'μ': r'$\mu$', 'σ': r'$\sigma$'}
-_TEX.update({chr(0x2080 + i): f'$_{{{i}}}$' for i in range(10)})                       # ₀..₉
+_TEX.update({chr(0x2080 + i): f'$_{{{i}}}$' for i in range(10)})
 _TEX.update({c: f'$^{{{d}}}$' for c, d in zip('⁰¹²³⁴⁵⁶⁷⁸⁹', '0123456789')})
 _TEX.update({'⁺': '$^{+}$', '⁻': '$^{-}$', '₊': '$_{+}$', '₋': '$_{-}$'})
 
@@ -212,10 +212,11 @@ def methods_text(public):
     rows = public['rows']
     paras = list(dict.fromkeys(_methods(r['protocol']) for r in rows))
     cals = {}
-    for r in rows:
+    reported_delta = [r for r in rows if r.get('delta') is not None]
+    for r in reported_delta:
         snap = r.get('calibration_snapshot') or {}
         model = snap.get('model') or {}
-        if model.get('alpha') is not None and r.get('delta') is not None:  # only calibrations that produced a reported δ
+        if model.get('alpha') is not None:
             c = cals.setdefault(r.get('calibration'), dict(model=model, entry=snap.get('entry') or {}, statuses=set()))
             c['statuses'].add(r.get('delta_status') or 'unknown')
     for cid, c in cals.items():
@@ -298,7 +299,7 @@ def verify(source) -> dict:
     try:
         with z:
             return _verify(z, checks, check)
-    except (KeyError, ValueError, TypeError, OverflowError, AttributeError, BadZipFile, csv.Error) as ex:  # malformed archive: a failed check
+    except (KeyError, ValueError, TypeError, OverflowError, AttributeError, BadZipFile, csv.Error) as ex:
         check('archive is a well-formed study report', False, f'{type(ex).__name__}: {ex}')
         return dict(ok=False, checks=checks)
 
@@ -318,7 +319,7 @@ def _csv_matches_rows(text, rows):
         return False
     actual_rows = list(actual)
     if any(None in row or None in row.values() for row in actual_rows):
-        return False  # extra or missing cells
+        return False
     return (Counter(tuple(sorted(row.items())) for row in actual_rows) ==
             Counter(tuple(sorted(row.items())) for row in expected))
 

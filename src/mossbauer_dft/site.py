@@ -3,13 +3,15 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 import shlex
-import hashlib
 import math
 import os
 import re
 import tempfile
 
 from .data import SITES_DIR, user_home
+from .fileio import sha256_file, write_atomic
+
+SSH_HOST = re.compile(r'(?:[A-Za-z0-9_][A-Za-z0-9_.-]*@)?[A-Za-z0-9_][A-Za-z0-9_.-]*')
 
 
 @dataclass
@@ -84,7 +86,7 @@ class SiteProfile:
             match = re.fullmatch(r'#SBATCH --([a-z][a-z0-9-]*)(?:=([A-Za-z0-9_.,:/@%+!=-]+))?', line) if isinstance(line, str) else None
             if not match or match[1] in managed or match[1] not in {'constraint', 'qos', 'reservation', 'exclusive', 'hint', 'distribution', 'licenses', 'mail-type', 'mail-user', 'requeue', 'no-requeue'}:
                 raise ValueError('extra_sbatch requires non-conflicting #SBATCH --flag[=value] lines')
-        if self.ssh_host is not None and (not isinstance(self.ssh_host, str) or not re.fullmatch(r'(?:[A-Za-z0-9_][A-Za-z0-9_.-]*@)?[A-Za-z0-9_][A-Za-z0-9_.-]*', self.ssh_host)):
+        if self.ssh_host is not None and (not isinstance(self.ssh_host, str) or not SSH_HOST.fullmatch(self.ssh_host)):
             raise ValueError('ssh_host must be an SSH alias or user@hostname')
         if self.remote_dir is not None:
             _path(self.remote_dir, 'remote_dir')
@@ -116,7 +118,7 @@ class SiteProfile:
         if isinstance(name_or_path, cls):
             return name_or_path.validate()
         if name_or_path is None:
-            name_or_path = resolve_site()
+            return _resolve()[1]
         p = Path(str(name_or_path)).expanduser()
         if p.suffix in ('.yaml', '.yml'):
             return cls.from_yaml(p)
@@ -125,12 +127,7 @@ class SiteProfile:
             for suffix in ('.yaml', '.yml'):
                 candidate = directory / (name_or_path + suffix)
                 if candidate.is_file():
-                    if not candidate.resolve().is_relative_to(directory.resolve()):
-                        raise ValueError('site profile escapes its sites directory')
-                    profile = cls.from_yaml(candidate)
-                    if profile.name != name_or_path:
-                        raise ValueError('profile name must match its filename')
-                    return profile
+                    return _read_checked(candidate, directory, name_or_path)
         raise FileNotFoundError(f'No site profile {name_or_path!r}; configure one with mossbauer site init')
 
     # ------------------------------------------------------------------
@@ -250,6 +247,15 @@ def _walltime(value):
         raise ValueError('time must be HH:MM:SS or D-HH:MM:SS')
 
 
+def _read_checked(path, directory, name):
+    if not path.resolve().is_relative_to(directory.resolve()):
+        raise ValueError('site profile escapes its sites directory')
+    profile = SiteProfile.from_yaml(path)
+    if profile.name != name:
+        raise ValueError('profile name must match its filename')
+    return profile
+
+
 def user_sites_dir():
     return user_home() / 'sites'
 
@@ -261,16 +267,11 @@ def site_profiles():
             shadowed = path.stem in rows and rows[path.stem]['origin'] != origin
             try:
                 validate_name(path.stem)
-                if not path.resolve().is_relative_to(directory.resolve()):
-                    raise ValueError('profile escapes its sites directory')
-                profile = SiteProfile.from_yaml(path)
-                if profile.name != path.stem:
-                    raise ValueError('profile name must match its filename')
+                _read_checked(path, directory, path.stem)
                 error = None
             except (OSError, ValueError, TypeError) as exc:
                 error = str(exc)
             except Exception as exc:
-                # A malformed YAML must not hide the remaining profiles.
                 import yaml
                 if not isinstance(exc, yaml.YAMLError):
                     raise
@@ -284,7 +285,7 @@ def available_sites() -> list[str]:
 
 
 def profile_hash(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return sha256_file(path)
 
 
 def save_profile(profile, *, replace=False, expected_hash=None):
@@ -320,21 +321,27 @@ class NoDefaultSiteError(ValueError):
     """No explicit, environment or configured cluster selection exists."""
 
 
-def resolve_site(explicit=None):
+def _read_config(path):
     import yaml
+    config = yaml.safe_load(path.read_text(encoding='utf-8'))
+    if not isinstance(config, dict):
+        raise ValueError('User config.yaml must be a mapping')
+    return config
+
+
+def _resolve(explicit=None):
     selected = explicit if explicit is not None else os.environ.get('MOSSBAUER_DFT_SITE')
     if selected is None:
         path = user_home() / 'config.yaml'
         if path.exists():
-            with path.open() as stream:
-                config = yaml.safe_load(stream)
-            if not isinstance(config, dict):
-                raise ValueError('User config.yaml must be a mapping')
-            selected = config.get('default_site')
+            selected = _read_config(path).get('default_site')
     if selected is None:
         raise NoDefaultSiteError('No default cluster: use mossbauer site init NAME, then mossbauer site default NAME, or pass --site NAME')
-    SiteProfile.load(selected)
-    return selected
+    return selected, SiteProfile.load(selected)
+
+
+def resolve_site(explicit=None):
+    return _resolve(explicit)[0]
 
 
 def set_default_site(name):
@@ -344,15 +351,7 @@ def set_default_site(name):
     root = user_home()
     root.mkdir(parents=True, exist_ok=True)
     path = root / 'config.yaml'
-    config = yaml.safe_load(path.read_text()) if path.exists() else {}
-    if not isinstance(config, dict):
-        raise ValueError('User config.yaml must be a mapping')
+    config = _read_config(path) if path.exists() else {}
     config['default_site'] = name
-    fd, temp = tempfile.mkstemp(dir=root, suffix='.tmp')
-    try:
-        with os.fdopen(fd, 'w', newline='\n') as stream:
-            yaml.safe_dump(config, stream, sort_keys=False)
-        os.replace(temp, path)
-    finally:
-        Path(temp).unlink(missing_ok=True)
+    write_atomic(path, yaml.safe_dump(config, sort_keys=False))
     return name

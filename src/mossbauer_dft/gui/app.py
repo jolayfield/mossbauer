@@ -40,7 +40,6 @@ def _sidebar():
             waiting[step["page_keys"][0]] = waiting.get(step["page_keys"][0], 0) + step["n"]
 
     def fmt(p):
-        # the check is the current entry's progress; the count is how many entries in the project wait at this step
         return STEPS[p] + ("  ✓" if done.get(p) else "") + (f"  · {waiting[p]} waiting" if waiting.get(p) else "")
     page = st.sidebar.radio("Workflow", PAGES, key="page", format_func=fmt)
     with st.sidebar.container(border=True):

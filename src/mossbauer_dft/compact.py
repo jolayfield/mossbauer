@@ -70,7 +70,7 @@ def import_bundle(root, entry, version, source, replace=False):
             if old is None: dest.unlink(missing_ok=True)
             else: J._write_atomic(dest, old)
         raise
-    for stem, state in (doc.get('census') or {}).items():  # job-state records are status, not evidence: newest wins
+    for stem, state in (doc.get('census') or {}).items():
         J._write_atomic(vd / 'outputs' / f'{stem}.state.json', json.dumps(state, sort_keys=True, indent=2))
     return dict(imported=[d.name.removesuffix('.compact.json') for d, _, _ in changes],
                 job_states=sorted((doc.get('census') or {})), unchanged=unchanged,

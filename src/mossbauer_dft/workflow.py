@@ -61,13 +61,7 @@ def write_inputs(plan_path, outdir, site: str | None = None, stamp: dict | None 
             txt = build_input(j["kind"], m, charge=j["charge"], multiplicity=j["multiplicity"], xyz_file=j["reads_xyz"])
         (outdir / f"{j['stem']}.inp").write_text(head + txt, encoding="utf-8", newline="\n")
         files.append(f"{j['stem']}.inp")
-        cmd = sp.sbatch_command(j["stem"], nprocs=n)
-        dep = [ids[d] for d in j["depends_on"] if d in ids]
-        var = f"J_{j['id']}"
-        if dep:
-            cmd = cmd.replace("sbatch", "sbatch --dependency=afterok:" + ":".join(f"${{{d}}}" for d in dep), 1)
-        cmds.append(f"{var}=$({cmd.replace('sbatch', 'sbatch --parsable', 1)})")
-        ids[j["id"]] = var
+        cmds.append(_chained(sp.sbatch_command(j["stem"], nprocs=n), j, ids))
     (outdir / SUBMIT_SCRIPT).write_text("\n".join(cmds) + "\n", encoding="utf-8", newline="\n")
     files.append(SUBMIT_SCRIPT)
     (outdir / "README_inputs.txt").write_text(
@@ -117,12 +111,20 @@ def input_site(outdir, explicit=None):
     return SiteProfile.load()
 
 
+def _chained(cmd: str, job: dict, ids: dict) -> str:
+    """``J_<id>=$(sbatch --parsable ...)``, after every already-submitted job it depends on; records its variable in ``ids``."""
+    dep = [ids[d] for d in job["depends_on"] if d in ids]
+    if dep:
+        cmd = cmd.replace("sbatch", "sbatch --dependency=afterok:" + ":".join(f"${{{d}}}" for d in dep), 1)
+    var = ids[job["id"]] = f"J_{job['id']}"
+    return f"{var}=$({cmd.replace('sbatch', 'sbatch --parsable', 1)})"
+
+
 def resubmit_script(plan: dict, outdir, stems, site: str | None = None, resources: dict | None = None) -> dict:
     """Write ``resubmit_failed.sh``: the named jobs plus every job depending on them (in plan order), chained with
     ``afterok`` among themselves.  A dependency outside the set is assumed complete and dropped.  ``resources`` gives
     per-stem ``time``/``mem_gb`` overrides.  Not executed automatically."""
     sp = input_site(outdir, site)
-    by_id = {j["id"]: j for j in plan["jobs"]}
     wanted = {j["id"] for j in plan["jobs"] if j["stem"] in set(stems)}
     grew = True
     while grew:
@@ -136,13 +138,8 @@ def resubmit_script(plan: dict, outdir, stems, site: str | None = None, resource
         if j["id"] not in wanted:
             continue
         r = (resources or {}).get(j["stem"]) or {}
-        cmd = sp.sbatch_command(j["stem"], nprocs=n, mem_gb=r.get("mem_gb"), time=r.get("time"))
-        dep = [ids[d] for d in j["depends_on"] if d in ids]
-        if dep:
-            cmd = cmd.replace("sbatch", "sbatch --dependency=afterok:" + ":".join(f"${{{d}}}" for d in dep), 1)
-        var = f"J_{j['id']}"
-        cmds.append(f"{var}=$({cmd.replace('sbatch', 'sbatch --parsable', 1)})")
-        ids[j["id"]], _ = var, chosen.append(j["stem"])
+        cmds.append(_chained(sp.sbatch_command(j["stem"], nprocs=n, mem_gb=r.get("mem_gb"), time=r.get("time")), j, ids))
+        chosen.append(j["stem"])
     path = Path(outdir) / RESUBMIT_SCRIPT
     path.write_text("\n".join(cmds) + "\n", encoding="utf-8", newline="\n")
     return dict(path=str(path), stems=chosen, commands=cmds[3:], site=sp.name, site_profile=profile_snapshot(sp))
@@ -237,7 +234,7 @@ def analyze(plan_path_or_dict, outputs, calibration=None, level: float = 0.95, q
         base = dict(job=stem, kind=job.get("kind", "mossbauer_sp"), purpose=",".join(job.get("purpose", [])), functional=res.fingerprint.functional,
                     ok=res.ok, s2=res.s2, s2_ideal=res.s2_ideal, output_fingerprint=res.fingerprint.to_dict(),
                     energy_Eh=res.final_energy, broken_symmetry=bool(job.get("broken_symmetry")))
-        common = []  # flags that concern every value from this output
+        common = []
         if not res.ok:
             notes.append(f"{stem}: calculation not OK (termination/SCF) - values unreliable")
             common.append(T.flag("calculation_not_ok", T.BLOCKING, "all", "calculation not OK (termination/SCF): values unreliable"))

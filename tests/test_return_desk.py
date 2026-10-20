@@ -160,3 +160,10 @@ def test_newest_run_record_wins(proj, fe1):
         "started job=99 node=n03 at=2026-10-19T08:00:00Z\nfinished rc=0 at=2026-10-19T09:00:00Z reason=normal\n")
     job = {j.stem: j for j in J.scan_version(proj, ref.entry_id).jobs}[stem]
     assert job.run_label == "finished" and stem not in J.failed_jobs(J.scan_version(proj, ref.entry_id))
+
+
+def test_newest_run_is_the_one_that_started_last():
+    old = dict(started=dict(at="2026-10-18T09:00:00Z"), finished=dict(rc="1"))
+    new = dict(started=dict(at="2026-10-18T10:30:00Z"))
+    assert J._newest_run([new, old]) is new and J._newest_run([old, new]) is new
+    assert J._newest_run([]) is None

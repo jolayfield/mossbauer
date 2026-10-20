@@ -173,3 +173,14 @@ def test_analysis_with_matched_project_fit_is_saved_as_project_fit(proj, fe1):
     _outputs(proj, ref)
     res = J.analyze_version(proj, ref.entry_id)
     assert res["delta_status"]["status"] == "project-fit", res["delta_status"]["reasons"]
+
+
+def test_abs_deq_cohorts_ignore_delta_status():
+    base = dict(metrics_eligible=True, delta_metrics_eligible=True, protocol={"p": 1}, calibration_snapshot={"c": 1},
+                calibration="cal", training_membership="unknown", functional="B3LYP",
+                delta=0.5, delta_exp=0.4, abs_deq=1.0, abs_deq_exp=1.1)
+    rows = [dict(base, delta_status="calibrated"), dict(base, delta_status="exploratory")]
+    summaries = S._summaries(rows)
+    deq = [s for s in summaries if s["property"] == "abs_deq"]
+    assert len(deq) == 1 and deq[0]["n"] == 2 and deq[0]["delta_status"] is None
+    assert len([s for s in summaries if s["property"] == "delta"]) == 2

@@ -239,7 +239,7 @@ def check_property_functional(func: str, what: str, oxidation_state=None, forbid
 
 
 # ----------------------------------------------------------------------------- methods
-FE_BASES = {"CP(PPP)": "CP(PPP)", "def2-TZVP": None}   # rule token -> MethodSpec.fe_basis (None: same basis as other atoms)
+FE_BASIS_BY_RULE_TOKEN: dict[str, str | None] = {"CP(PPP)": "CP(PPP)", "def2-TZVP": None}
 
 
 def _tok(x):
@@ -250,10 +250,9 @@ def _tok(x):
 def recommend_methods(sel: dict, system: SystemInfo, overrides: dict) -> dict:
     d, q = sel["delta"], sel["deltaEQ"]
     proto = d.get("single_point_protocol", {})
-    # the Fe basis is the explicit token delta.fe_basis; basis_fe is descriptive text and is never parsed
-    if d.get("fe_basis") not in FE_BASES:
-        raise PlanError(f"rule {sel['id']}: delta.fe_basis must be one of {sorted(FE_BASES)}, got {d.get('fe_basis')!r}")
-    fe_basis = FE_BASES[d["fe_basis"]]
+    if d.get("fe_basis") not in FE_BASIS_BY_RULE_TOKEN:
+        raise PlanError(f"rule {sel['id']}: delta.fe_basis must be one of {sorted(FE_BASIS_BY_RULE_TOKEN)}, got {d.get('fe_basis')!r}")
+    fe_basis = FE_BASIS_BY_RULE_TOKEN[d["fe_basis"]]
     basis = proto.get("basis_other") or "def2-TZVP"
     basis = "def2-TZVP" if "def2-TZVP" in basis else basis
     delta_f = overrides.get("delta_functional") or d["functional"]
@@ -630,7 +629,7 @@ def save_plan(plan: dict, path) -> Path:
     xyz = body.pop("_structure_xyz", None)
     body["plan_hash"] = compute_hash(plan)
     if xyz is not None:
-        (path.parent / "structure.xyz").write_text(xyz, encoding="utf-8", newline="\n")  # LF on every OS: part of the hash, travels between machines
+        (path.parent / "structure.xyz").write_text(xyz, encoding="utf-8", newline="\n")
     with open(path, "w", encoding="utf-8") as f:
         yaml.safe_dump(body, f, sort_keys=False, allow_unicode=True, width=110)
     return path

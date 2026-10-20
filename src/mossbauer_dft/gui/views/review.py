@@ -17,6 +17,18 @@ def _cb_clear_edit_preview():
     ss._edit_preview = None  # a preview built for the previously chosen preset must not be saved under the new choice
 
 
+def _overrides_from_form(form: dict, saved: dict, bs_atoms: str) -> dict:
+    """Overrides for ``project.edit_entry``, which merges them into the newest version's: a field cleared on the form is
+    sent as its unset value ("" for a functional, None otherwise), which make_plan reads like an absent key. A
+    broken-symmetry spec this form cannot show (e.g. na/nb from the CLI) is kept, not cleared."""
+    form = dict(form)
+    if (saved.get("broken_symmetry") or {}).get("kind") not in (None, "flipspin") and not bs_atoms.strip():
+        form.pop("broken_symmetry")
+    edit = {k: v for k, v in form.items() if v not in (None, "")}
+    edit.update({k: ("" if k.endswith("functional") else None) for k, v in form.items() if v in (None, "") and saved.get(k) not in (None, "")})
+    return edit
+
+
 def _cb_version(key: str):
     ss.version = ss[key]
 
@@ -195,12 +207,7 @@ def _edit_form(cur: Current):
                      geometry=dict(mode=gm, functional=gf.split("/")[0], basis=(gf.split("/") + ["def2-SVP"])[1], freq=freq,
                                    **({"as_given_label": gf} if gm == "as_given" else {})),
                      broken_symmetry=dict(kind="flipspin", flip_atoms=[int(x) for x in bsf.split(",") if x.strip()], final_ms=bsm) if bsf.strip() else None)
-            # project.edit_entry merges overrides into the newest version's: a cleared field is sent as its "unset" value
-            # ("" for a functional, None for broken symmetry), which make_plan reads exactly like an absent key
-            if (ov.get("broken_symmetry") or {}).get("kind") not in (None, "flipspin") and not bsf.strip():
-                o.pop("broken_symmetry")  # a spec this form cannot show (e.g. na/nb from the CLI) is kept, not cleared
-            edit = {k: v for k, v in o.items() if v not in (None, "")}
-            edit.update({k: ("" if k.endswith("functional") else None) for k, v in o.items() if v in (None, "") and ov.get(k) not in (None, "")})
+            edit = _overrides_from_form(o, ov, bsf)
             from mossbauer_dft import revision
             experimental = dict(inp.get('experimental') or {})
             for key, value in [('delta', exp_delta), ('deq', exp_deq)]:

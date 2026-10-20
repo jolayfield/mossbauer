@@ -26,12 +26,10 @@ EXAMPLES = {
     ),
 }
 
-# GUI page keys and the labels the sidebar shows; guide steps name pages by key so the two cannot drift.
 PAGE_LABELS = {"Project": "Project", "New prediction": "1  Structure", "Batch intake": "Batch intake",
                "Plan review": "2  Review & approve", "Inputs": "3  ORCA inputs", "Results": "4  Results",
                "Study": "Study comparison", "Calibration": "Calibration workbench", "States": "State families",
                "References": "Reference data", "Cluster setup": "Cluster setup"}
-# Step id -> the GUI pages where it is done (the first one is where "Do this next" goes).
 STEP_PAGES = {"add": ["New prediction", "Batch intake"], "approve": ["Plan review"], "inputs": ["Inputs"],
               "run": ["Results"], "analyze": ["Results"], "compare": ["Study"]}
 
@@ -119,7 +117,7 @@ def create_example(root, example_id: str = "iron-basics", recorded_pack=None) ->
     pack = None
     if recorded_pack is not None:
         from . import recorded
-        pack = recorded.read_pack(recorded_pack)   # fully validated before anything is written
+        pack = recorded.read_pack(recorded_pack)
         if pack["meta"].get("example") != example_id:
             raise ExampleError(f"the pack records example {pack['meta'].get('example')!r}, not {example_id!r}")
     root = Path(root)
@@ -133,8 +131,8 @@ def create_example(root, example_id: str = "iron-basics", recorded_pack=None) ->
     missing = [c["id"] for c, p in zip(compounds, paths) if p is None]
     if missing:
         raise ExampleError(f"bundled structures missing for {', '.join(missing)}")
-    structures = [read_structure(p) for p in paths]   # read everything before writing anything
-    if pack is not None:  # checked before anything is written
+    structures = [read_structure(p) for p in paths]
+    if pack is not None:
         by_compound = {c["id"]: next((e for e in pack["plans"] if e.startswith(c["id"] + "_")), None) for c in compounds}
         if None in by_compound.values() or len(pack["plans"]) != len(compounds):
             raise ExampleError("the pack's entries are not this example's compounds")

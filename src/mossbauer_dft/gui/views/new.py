@@ -279,7 +279,7 @@ def page_new():
     _cli(f"mossbauer project add --project {root or 'PROJECT'} --structure structure.xyz --charge Q --multiplicity M --ox-state N [...]")
     st.subheader("Structure")
     src = _source_picker()
-    if src == "Draw":  # the editor needs the full width for its toolbars
+    if src == "Draw":
         _source_body(src)
         _structure_panel()
     else:
@@ -315,10 +315,10 @@ def page_new():
     same = None
     if cur is not None and (cur.entry.display_name or cur.entry.entry_id) == name:
         try:
-            newest = J.load_version(cur.root, cur.entry.entry_id)
+            newest = cur.plan if cur.newest and cur.plan is not None else J.load_version(cur.root, cur.entry.entry_id)
             if J.state_of(newest) == (int(charge), int(mult), None):
                 same = (cur.entry.entry_id, newest)
-        except Exception:  # noqa: BLE001 -- an unreadable newest version: create a new entry instead
+        except Exception:  # noqa: BLE001
             same = None
     if root is None:
         st.info("Open or create a project on the **Project** page first: each plan is saved as an entry of the project.")

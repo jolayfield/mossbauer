@@ -25,8 +25,8 @@ def _batch_state():
     ss.setdefault("batch_rows", [])
     if ss.get("_batch_src") is None:
         ss._batch_src = B.Sources()
-    ss.setdefault("_batch_seen", set())   # content hashes of the uploads and pastes already applied
-    ss.setdefault("_batch_ver", 0)        # editor key generation (KTD11)
+    ss.setdefault("_batch_seen", set())
+    ss.setdefault("_batch_ver", 0)
     ss.setdefault("_batch_npaste", 0)
 
 
@@ -95,10 +95,14 @@ def _batch_add(items: list[tuple[str, str]]):
     _batch_set_rows(ss.batch_rows + new)
 
 
+def _sha(data: bytes | str) -> str:
+    return hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()
+
+
 def _cb_batch_paste():
     _batch_fold()
     txt = ss.get("batch_paste") or ""
-    h = hashlib.sha256(txt.encode()).hexdigest()
+    h = _sha(txt)
     if h in ss._batch_seen:
         ss._batch_msg = "That text was already added."
     else:
@@ -152,7 +156,7 @@ def _batch_frame(rows: list[dict], src: B.Sources) -> pd.DataFrame:
             d[c] = "" if d[c] is None else str(d[c])
         recs.append(d)
     df = pd.DataFrame(recs, columns=B.COLUMNS)
-    for c in _BATCH_INT:  # a value that is not a whole number shows blank here; the status column names it
+    for c in _BATCH_INT:
         num = pd.to_numeric(df[c], errors="coerce")
         df[c] = num.where(num.isna() | (num % 1 == 0)).astype("Int64")
     for c in _BATCH_FLOAT:
@@ -257,7 +261,7 @@ def _batch_options_form():
 
 def _batch_fingerprint(rows: list[dict], options: dict) -> str:
     pin = dict(rows=rows, options=options, recorded=ss.get("_batch_recorded"), refs=list(ss._batch_src.structures))
-    return hashlib.sha256(json.dumps(pin, sort_keys=True, default=str).encode()).hexdigest()
+    return _sha(json.dumps(pin, sort_keys=True, default=str))
 
 
 def _batch_table(rows: list[dict]):
@@ -322,7 +326,7 @@ def page_batch():
         fresh = []
         for up in ups or []:
             data = up.getvalue()
-            h = hashlib.sha256(data).hexdigest()
+            h = _sha(data)
             if h not in ss._batch_seen:
                 ss._batch_seen.add(h)
                 fresh.append((up.name, data.decode("utf-8", errors="replace")))
@@ -348,7 +352,7 @@ def page_batch():
     csv_up = st.file_uploader("Import a batch CSV", type=["csv"], key="batch_csv")
     if csv_up is not None:
         data = csv_up.getvalue()
-        h = hashlib.sha256(data).hexdigest()
+        h = _sha(data)
         if h != ss.get("_batch_csv_seen") and (ss.get("_batch_csv_pending") or {}).get("hash") != h:
             try:
                 rows, recorded = B.read_csv(data.decode("utf-8", errors="replace"))

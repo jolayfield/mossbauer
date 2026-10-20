@@ -10,8 +10,8 @@ import streamlit as st
 
 from mossbauer_dft import plan as P
 from mossbauer_dft import project as J
-from mossbauer_dft.gui.state import STEPS, _cb_open_entry, _cb_seal, _evaluate, _goto, _invalidate, _root, _scan, _set_project, ss
-from mossbauer_dft.gui.widgets import _cli, _refresh, _scanned_caption
+from mossbauer_dft.gui.state import STEPS, _cb_open_entry, _cb_seal, _evaluate, _fail, _goto, _invalidate, _root, _scan, _set_project, ss
+from mossbauer_dft.gui.widgets import _cli, _preset_names, _refresh, _scanned_caption
 
 
 def _cb_open():
@@ -19,7 +19,7 @@ def _cb_open():
     if path:
         _evaluate(path)
     else:
-        ss._target = dict(path="", kind="error", msg="Type the path of a project folder.")
+        _fail("", "Type the path of a project folder.")
 
 
 def _cb_create(path: str):
@@ -27,7 +27,7 @@ def _cb_create(path: str):
         J.create_project(path, name=(ss.get("new_name") or "").strip() or None)
         _set_project(Path(path))
     except Exception as e:  # noqa: BLE001
-        ss._target = dict(path=path, kind="error", msg=f"Could not create a project in {path}: {type(e).__name__}: {e}")
+        _fail(path, f"Could not create a project in {path}: {type(e).__name__}: {e}")
 
 
 def _cb_example(path: str):
@@ -36,7 +36,7 @@ def _cb_example(path: str):
         refs = T.create_example(path)
         _set_project(Path(path), refs[0].entry_id, refs[0].version)
     except Exception as e:  # noqa: BLE001
-        ss._target = dict(path=path, kind="error", msg=f"Could not create the guided example in {path}: {type(e).__name__}: {e}")
+        _fail(path, f"Could not create the guided example in {path}: {type(e).__name__}: {e}")
 
 
 def _cb_import(path: str):
@@ -44,7 +44,7 @@ def _cb_import(path: str):
         ref = J.import_legacy(path)
         _set_project(Path(path), ref.entry_id, ref.version)
     except Exception as e:  # noqa: BLE001
-        ss._target = dict(path=path, kind="error", msg=f"Import failed (originals untouched): {type(e).__name__}: {e}")
+        _fail(path, f"Import failed (originals untouched): {type(e).__name__}: {e}")
 
 
 def _overview_row(e: J.EntryStatus) -> dict:
@@ -282,7 +282,7 @@ def _cb_bulk_preset_apply():
 
 def _bulk_panel(root, by_id: dict, ids: list[str]):
     """The other per-entry steps for the same selection: write inputs, analyze, re-analyze, apply a preset."""
-    from mossbauer_dft import bulk as B, presets as PR
+    from mossbauer_dft import bulk as B
     with st.container(border=True):
         st.markdown(f"#### Act on {len(ids)} selected")
         counts = {v: [e for e in ids if B.eligibility(by_id[e].newest if e in by_id else None, v) is None] for v in B.VERBS}
@@ -293,7 +293,7 @@ def _bulk_panel(root, by_id: dict, ids: list[str]):
                        on_click=_cb_bulk, args=(verb, counts[verb]), use_container_width=True)
         st.caption("Each entry's newest version is handled on its own; entries that are not ready are skipped with the reason. "
                    "Re-analyze refreshes calibration status and trust flags of saved analyses.")
-        names = [p["name"] for p in PR.list_presets(root)]
+        names = _preset_names(root)
         if names:
             p1, p2 = st.columns([3, 2], vertical_alignment="bottom")
             p1.selectbox("Apply a method preset to the selection", names, key="bulk_preset")

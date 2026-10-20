@@ -1,6 +1,7 @@
 """Study comparison page: saved analyses side by side across the project."""
 from __future__ import annotations
 import io
+import json
 
 import pandas as pd
 import streamlit as st
@@ -55,8 +56,7 @@ def page_study():
         st.caption(note)
     st.download_button('Download study CSV', study.comparison_csv(doc), 'study.csv', mime='text/csv')
     from mossbauer_dft import report
-    # the same allowlisted snapshot as the report: no local paths or unlisted metadata leave the app
-    st.download_button('Download study JSON (shareable snapshot)', __import__('json').dumps(report.public_snapshot(doc), indent=2),
+    st.download_button('Download study JSON (shareable snapshot)', json.dumps(report.public_snapshot(doc), indent=2),
                        'study.json', mime='application/json')
     st.subheader('Portable study report')
     title = st.text_input('Report title', value='Mössbauer study report', key='report_title')

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from email.parser import BytesParser
 import hashlib
+import io
 import os
 from pathlib import Path
 import re
@@ -36,7 +37,6 @@ def prepare(wheel, outdir, docs, version, markers=None, require_markers=False):
     if wheel.name != expected or not wheel.is_file() or wheel.is_symlink():
         raise ValueError(f'Expected wheel {expected}')
     content = wheel.read_bytes()
-    import io
     with zipfile.ZipFile(io.BytesIO(content)) as z:
         names = z.namelist()
         for name in names:

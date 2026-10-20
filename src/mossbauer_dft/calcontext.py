@@ -16,7 +16,7 @@ def compound_meta() -> dict:
     for name in ("fe1_calib18", "mcwilliams2017"):
         try:
             d = R.refset_definition(name)
-        except Exception:  # noqa: BLE001 -- a missing bundled set just means less context
+        except Exception:  # noqa: BLE001
             continue
         for c in d.get("compounds", []):
             out.setdefault(c["id"], dict(name=c.get("name") or c["id"], ox=_ox(c.get("formal_ox_state")),

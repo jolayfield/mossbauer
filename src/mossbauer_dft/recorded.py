@@ -109,7 +109,7 @@ def read_pack(source) -> dict:
         plans, bundles = {}, {}
         for item in meta["entries"]:
             eid = item.get("entry") if isinstance(item, dict) else None
-            if not isinstance(eid, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", eid):
+            if not isinstance(eid, str) or not harvest.SAFE.fullmatch(eid):
                 raise PackError("invalid pack entry")
             with tempfile.TemporaryDirectory() as tmp:
                 for name in ("plan.yaml", "structure.xyz"):
@@ -121,7 +121,6 @@ def read_pack(source) -> dict:
             if not P.plan_integrity(plan) or P.compute_hash(plan) != item.get("plan_hash") or plan["inputs"].get("name") != eid:
                 raise PackError(f"frozen plan for {eid} does not match its recorded hash")
             if plan.get("status") != "draft" or plan.get("approval") is not None:
-                # the hash leaves approval out, so this must be checked on its own: approving is the learner's step
                 raise PackError(f"frozen plan for {eid} is not a draft; a pack must never carry an approval")
             try:
                 doc = json.loads(z.read(f"bundles/{eid}.json"), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))

@@ -5,10 +5,9 @@ import hashlib
 import io
 import json
 from pathlib import Path
-import re
 import zipfile
 
-from . import plan as P
+from . import harvest, plan as P
 
 FIXED_FILES = {'structure.xyz', 'orca_job.slurm', 'submit.sh', 'README_inputs.txt',
                'site.json', 'harvest.pyz', 'harvest-manifest.json'}
@@ -26,7 +25,7 @@ def verified_files(outdir, plan=None) -> dict[str, bytes]:
     if not isinstance(metadata, dict):
         raise ValueError('Invalid input manifest; regenerate inputs')
     stems = metadata.get('expected_stems', [])
-    if not isinstance(stems, list) or not stems or any(not isinstance(s, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', s) for s in stems):
+    if not isinstance(stems, list) or not stems or any(not isinstance(s, str) or not harvest.SAFE.fullmatch(s) for s in stems):
         raise ValueError('Invalid input stems; regenerate inputs')
     if plan is not None and (metadata.get('plan_hash') != plan['plan_hash'] or
                              stems != [j['stem'] for j in plan['jobs']]):
@@ -116,19 +115,19 @@ def agent_instructions(root, entry, version=None) -> str:
     return _instructions(entry, vd, plan, files)
 
 
-def export_inputs(root, entry, version=None, *, agent=False, upload=False) -> bytes:
+def export_inputs(root, entry, version=None, *, agent=False, upload=False, transfer_site=None) -> bytes:
+    """``transfer_site`` (a profile or its name) supplies the upload helper's SSH settings; default: the generated site."""
     vd, plan, files = selection(root, entry, version)
     if upload:
-        files['upload.sh'] = _upload_script(entry, vd, plan, files, _transfer_profile(upload, files)).encode('utf-8')
+        files['upload.sh'] = _upload_script(entry, vd, plan, files, _transfer_profile(transfer_site, files)).encode('utf-8')
     if agent:
         files['AGENT.md'] = _instructions(entry, vd, plan, files).encode('utf-8')
     return archive(files)
 
 
-def _transfer_profile(upload, files):
+def _transfer_profile(transfer_site, files):
     from .site import SiteProfile
-    name = json.loads(files['site.json'])['profile']['name'] if upload is True else upload
-    profile = SiteProfile.load(name)
+    profile = SiteProfile.load(transfer_site if transfer_site is not None else json.loads(files['site.json'])['profile']['name'])
     if not profile.ssh_host or not profile.remote_dir:
         raise ValueError('Upload helper needs ssh_host and remote_dir on Cluster setup; file-only export remains available')
     return profile
@@ -184,12 +183,12 @@ printf 'Uploaded to %s:%s. Submission remains your responsibility.\\n' "$HOST" "
 
 
 def _upload_destination(entry, vd, plan, profile):
-    if not re.fullmatch(r'[A-Za-z0-9_-]+', entry):
+    if not harvest.SAFE.fullmatch(entry):
         raise ValueError('Invalid entry for upload destination')
     return profile.remote_dir.rstrip('/') + '/' + entry + '_' + vd.name + '_' + plan['plan_hash'][:12]
 
 
-def upload_preview(root, entry, version=None, *, transfer_site=True) -> dict:
+def upload_preview(root, entry, version=None, *, transfer_site=None) -> dict:
     vd, plan, files = selection(root, entry, version)
     profile = _transfer_profile(transfer_site, files)
     return dict(host=profile.ssh_host, destination=_upload_destination(entry, vd, plan, profile),

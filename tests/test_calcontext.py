@@ -38,8 +38,8 @@ def test_coverage_warns_before_approval_for_uncovered_oxidation_state(fe1, _home
 
 def test_low_confidence_rule_is_surfaced(fe1, _home):
     plan = P.make_plan(fe1, -1, 4, oxidation_state=1, radical_ligand=True)
-    if str(plan["rule_evaluation"].get("confidence", "")).lower().startswith("low"):
-        assert any("confidence" in c["text"] for c in X.coverage(plan))
+    plan["rule_evaluation"]["confidence"] = "low: test rule"
+    assert any("confidence" in c["text"] for c in X.coverage(plan))
 
 
 def test_nearest_references_carry_chemistry_and_flags():
