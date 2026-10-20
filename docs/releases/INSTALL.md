@@ -1,17 +1,17 @@
 # Install Mössbauer DFT
 
-Download `mossbauer_dft-0.6.0-py3-none-any.whl` and `SHA256SUMS` from [the v0.6.0 release](https://github.com/jolayfield/mossbauer/releases/tag/v0.6.0). No GitHub login or source checkout is required. Dependencies download from PyPI during installation.
+Download `mossbauer_dft-0.6.1-py3-none-any.whl` and `SHA256SUMS` from [the v0.6.1 release](https://github.com/jolayfield/mossbauer/releases/tag/v0.6.1). No GitHub login or source checkout is required. Dependencies download from PyPI during installation.
 
 Compare the downloaded wheel's SHA-256 digest with its line in SHA256SUMS. On macOS:
 
 ```sh
-shasum -a 256 ./mossbauer_dft-0.6.0-py3-none-any.whl
+shasum -a 256 ./mossbauer_dft-0.6.1-py3-none-any.whl
 ```
 
 On Windows PowerShell:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 .\mossbauer_dft-0.6.0-py3-none-any.whl
+Get-FileHash -Algorithm SHA256 .\mossbauer_dft-0.6.1-py3-none-any.whl
 ```
 
 ## Recommended: uv and managed Python 3.12
@@ -19,7 +19,7 @@ Get-FileHash -Algorithm SHA256 .\mossbauer_dft-0.6.0-py3-none-any.whl
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), reopen your terminal, then run this from the download directory on Windows PowerShell, macOS or Linux:
 
 ```text
-uv tool install --python 3.12 ./mossbauer_dft-0.6.0-py3-none-any.whl
+uv tool install --python 3.12 ./mossbauer_dft-0.6.1-py3-none-any.whl
 uv tool update-shell
 ```
 
@@ -40,7 +40,7 @@ Use Python 3.12, create a virtual environment and install the same wheel. On mac
 ```sh
 python3.12 -m venv .venv
 . .venv/bin/activate
-python -m pip install ./mossbauer_dft-0.6.0-py3-none-any.whl
+python -m pip install ./mossbauer_dft-0.6.1-py3-none-any.whl
 mossbauer doctor
 mossbauer gui
 ```
@@ -49,7 +49,7 @@ On Windows PowerShell:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python -m pip install ./mossbauer_dft-0.6.0-py3-none-any.whl
+.\.venv\Scripts\python -m pip install ./mossbauer_dft-0.6.1-py3-none-any.whl
 .\.venv\Scripts\mossbauer doctor
 .\.venv\Scripts\mossbauer gui
 ```

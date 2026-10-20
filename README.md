@@ -24,13 +24,13 @@ Download the wheel from [public releases](https://github.com/jolayfield/mossbaue
 With [uv](https://docs.astral.sh/uv/getting-started/installation/) installed, run from the download directory on either platform:
 
 ```text
-uv tool install --python 3.12 ./mossbauer_dft-0.6.0-py3-none-any.whl
+uv tool install --python 3.12 ./mossbauer_dft-0.6.1-py3-none-any.whl
 uv tool update-shell
 ```
 
 Reopen your terminal if uv updated PATH, then run `mossbauer doctor` and `mossbauer gui`. GUI, RDKit and drawing support are included; no extra is needed. The 3D viewer needs network access to load 3Dmol.js. Python 3.10 remains supported; managed Python 3.12 is recommended.
 
-For pip, create a Python 3.12 virtual environment and install the same downloaded wheel with `python -m pip install ./mossbauer_dft-0.6.0-py3-none-any.whl`. The [guide](docs/releases/INSTALL.md#pip-fallback) gives activation-free Windows commands as well as macOS/Linux steps.
+For pip, create a Python 3.12 virtual environment and install the same downloaded wheel with `python -m pip install ./mossbauer_dft-0.6.1-py3-none-any.whl`. The [guide](docs/releases/INSTALL.md#pip-fallback) gives activation-free Windows commands as well as macOS/Linux steps.
 
 ## Develop from a checkout
 
